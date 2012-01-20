@@ -1,0 +1,16 @@
+
+
+=== Build ===
+
+To build just type:
+   make
+
+It assumes that the directories gencoredoc/ hitscore/ sequme/ and
+biocaml/ are at the same level and `make doc' has been called on them.
+
+To change those paths, set the variables HITSCORE_DOC, SEQUME_DOC,
+and/or BIOCAML_DOC in a file setup.data, e.g.:
+  echo 'HITSCORE_DOC = ../../some/special/path/to_hiscore' > setup.data
+the makefile will use this.
+
+
