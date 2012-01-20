@@ -29,7 +29,7 @@ COMMON_DEPS= _build/include.m4
 _build/%.pp: src/%.txt $(COMMON_DEPS)
 	$(M4_HTML) $< > $@
 
-HTML_FILES= _build/doc/index.html  _build/doc/ocaml_links.html
+HTML_FILES= _build/doc/index.html  _build/doc/ocaml_links.html _build/doc/hitscore_migration.html
 
 _build/doc/gdcstyle.css: src/style.css
 	$(M4_HTML) $< > $@

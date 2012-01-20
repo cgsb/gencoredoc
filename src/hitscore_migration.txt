@@ -1,0 +1,21 @@
+
+{2 Hitscore Migration Notes}
+
+
+Follow the following steps to do in order to switch to a new version
+{e V.W}:
+{ul
+  {li switch the version to {e V.W} {ul
+      {li In the {e _oasis} file (requires an {e ocaml setup.ml -distclean})}
+      {li in the migrator: {e mk} script (with the {i future} {e vV.W} git
+      tag), and in the source (while outputting version field of the S-Exp)}}}
+  {li merge to {e master}}
+  {li {e git tag -a vV.W -m '...'}}
+  {li With the previous version of {e hitscore}: {ul
+      {li {e hitscore production dump-to-file hitscore_dump.sexp}}}}
+  {li Compile {e hitscore} and the migrator with v. {e V.W}, and: {ul
+      {li {e _migrator/migrator vPrev-vV.W hitscore_dump.sexp hitscore_to_load.sexp}}
+      {li {e hitscore production wenv 'make dbupdate'} {i (or re-init
+          the DB in some other way)}}
+      {li {e hitscore dev load-file hitscore_load.sexp}}}}
+}
