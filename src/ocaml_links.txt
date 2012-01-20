@@ -37,6 +37,8 @@ Biocaml and Sequme use {{:http://batteries.forge.ocamlcore.org/}Batteries}: {ul
     {{:http://unnali.com/2011/01/postgresql-and-pgocaml/}introductory blog post}}
   {li Dario Teixeira's
     {{:http://www.dse.nl/~dario/projects/pgoctut/}tutorial}}
+  {li Things like {e LEFT OUTER JOIN} with {e "nullable-results"} are in
+    {{:https://github.com/angavrilov/pgocaml/blob/master-classic/BUGS.txt}BUGS.txt}}
 }
 
 Getting Postgres on a Debian-like system: {v
