@@ -39,27 +39,27 @@ Biocaml and Sequme use {{:http://batteries.forge.ocamlcore.org/}Batteries}: {ul
     {{:http://www.dse.nl/~dario/projects/pgoctut/}tutorial}}
 }
 
-Getting Postgres on a Debian-like system: {[
+Getting Postgres on a Debian-like system: {v
 apt-get install postgresql postgresql-client
 sudo su postgres
-createuser -s mondet
-]}
+createuser -s <username>
+v}
 
 On CentOS it is more low-level (c.f. a few docs:
 {{:http://www.cyberciti.biz/faq/howto-fedora-linux-install-postgresql-server/}1},
 {{:http://www.cyberciti.biz/faq/howto-add-postgresql-user-account/}2}):
 {v
-  yum install postgresql postgresql-server
-  service postgresql initdb
-  /etc/init.d/postgresql restart
-  su - postgres
-  psql template1
+yum install postgresql postgresql-server
+service postgresql initdb
+/etc/init.d/postgresql restart
+su - postgres
+psql template1
 v}
-In [psql]:
+In {e psql}:
 {v
-  create user smondet;
-  create database smondet;
-  grant all privileges on database smondet to smondet;
+create user smondet;
+create database smondet;
+grant all privileges on database smondet to smondet;
 v}
 
 
