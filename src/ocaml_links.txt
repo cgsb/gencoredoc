@@ -1,5 +1,74 @@
 
-Some OCaml-related useful links.
+{1 OCaml-related Links}
 
-{i {b TODO}}
+{2 Core}
+
+Hitscore and hiscoreweb use 
+{{:http://ocaml.janestreet.com/?q=node/13}Jane St's Core}: {ul
+  {li {{:http://www.janestreet.com/ocaml/doc/core/index.html}Index of the documentation}}
+  {li
+     {{:http://www.janestreet.com/ocaml/doc/core/Std.html}Core.Std},
+     {{:http://www.janestreet.com/ocaml/doc/core/Time.html}Time}.\{
+      {{:http://www.janestreet.com/ocaml/doc/core/Std.Time.Zone.html}Zone},
+      {{:http://www.janestreet.com/ocaml/doc/core/Std.Time.Date.html}Date}\},
+    {{:http://www.janestreet.com/ocaml/doc/core/Std.Arg.html}Arg},
+    {{:http://www.janestreet.com/ocaml/doc/core/Core_list.html}List},
+    {{:http://www.janestreet.com/ocaml/doc/core/Core_array.html}Array},
+    {{:http://www.janestreet.com/ocaml/doc/core/Core_string.html}String} …}
+  {li
+    {{:http://www.janestreet.com/ocaml/janestreet-ocamldocs/sexplib/index.html
+      }Sexplib}.{{:
+        http://www.janestreet.com/ocaml/janestreet-ocamldocs/sexplib/Sexp_intf.S.html
+      }Sexp}}
+}
+
+{2 Batteries}
+
+Biocaml and Sequme use {{:http://batteries.forge.ocamlcore.org/}Batteries}: {ul
+  {li {{:http://ocaml-batteries-team.github.com/batteries-included/hdoc/}ocamldoc}}
+  {li {{:https://github.com/ocaml-batteries-team/batteries-included}source}}
+  {li {{:https://github.com/ocaml-batteries-team/batteries-included/wiki/}wiki}}
+}
+
+{2 PG'OCaml}
+
+{{:http://pgocaml.forge.ocamlcore.org/}PG'OCaml}: {ul
+  {li
+    {{:http://unnali.com/2011/01/postgresql-and-pgocaml/}introductory blog post}}
+  {li Dario Teixeira's
+    {{:http://www.dse.nl/~dario/projects/pgoctut/}tutorial}}
+}
+
+Getting Postgres on a Debian-like system: {[
+apt-get install postgresql postgresql-client
+sudo su postgres
+createuser -s mondet
+]}
+
+On CentOS it is more low-level (c.f. a few docs:
+{{:http://www.cyberciti.biz/faq/howto-fedora-linux-install-postgresql-server/}1},
+{{:http://www.cyberciti.biz/faq/howto-add-postgresql-user-account/}2}):
+{v
+  yum install postgresql postgresql-server
+  service postgresql initdb
+  /etc/init.d/postgresql restart
+  su - postgres
+  psql template1
+v}
+In [psql]:
+{v
+  create user smondet;
+  create database smondet;
+  grant all privileges on database smondet to smondet;
+v}
+
+
+{2 Ocsigen}
+
+C.f. {{:http://ocsigen.org}ocsigen.org}.
+{ul 
+  {li {{:http://ocsigen.org/ocsigenserver/manual/config}Configuration file doc}}
+  {li {{:http://ocsigen.org/lwt/manual/}Lwt manual}}
+  {li {{:http://ocsigen.org/darcsweb/?r=lwt;a=tree}sources}}
+}
 
