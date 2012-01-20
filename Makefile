@@ -31,6 +31,9 @@ _build/%.pp: src/%.txt $(COMMON_DEPS)
 
 HTML_FILES= _build/doc/index.html  _build/doc/ocaml_links.html
 
+_build/doc/gdcstyle.css: src/style.css
+	$(M4_HTML) $< > $@
+
 _build/doc/hitscore/:
 	mkdir -p $@
 	cp -r $(HITSCORE_DOC)/* $@
@@ -44,10 +47,12 @@ _build/doc/sequme/:
 	cp -r $(SEQUME_DOC)/* $@
 
 _build/doc/%.html: _build/%.pp $(COMMON_DEPS) 
-	$(OCAMLDOCHTML) -d _build/doc/  -intro $< -o $*
+	$(OCAMLDOCHTML) -d _build/doc/ -t "GCD:$*" -css-style gdcstyle.css -intro $< -o $*
 
 
-customdoc: $(HTML_FILES) _build/doc/hitscore/ _build/doc/sequme/ _build/doc/biocaml/
+customdoc: $(HTML_FILES) \
+  _build/doc/hitscore/ _build/doc/sequme/ _build/doc/biocaml/ \
+  _build/doc/gdcstyle.css
 
 clean:
 	rm -fr _build

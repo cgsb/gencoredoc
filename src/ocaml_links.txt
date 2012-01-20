@@ -1,7 +1,7 @@
 
-{1 OCaml-related Links}
+{2 OCaml-related Links}
 
-{2 Core}
+{3 Core}
 
 Hitscore and hiscoreweb use 
 {{:http://ocaml.janestreet.com/?q=node/13}Jane St's Core}: {ul
@@ -22,7 +22,7 @@ Hitscore and hiscoreweb use
       }Sexp}}
 }
 
-{2 Batteries}
+{3 Batteries}
 
 Biocaml and Sequme use {{:http://batteries.forge.ocamlcore.org/}Batteries}: {ul
   {li {{:http://ocaml-batteries-team.github.com/batteries-included/hdoc/}ocamldoc}}
@@ -30,7 +30,7 @@ Biocaml and Sequme use {{:http://batteries.forge.ocamlcore.org/}Batteries}: {ul
   {li {{:https://github.com/ocaml-batteries-team/batteries-included/wiki/}wiki}}
 }
 
-{2 PG'OCaml}
+{3 PG'OCaml}
 
 {{:http://pgocaml.forge.ocamlcore.org/}PG'OCaml}: {ul
   {li
@@ -63,7 +63,7 @@ In [psql]:
 v}
 
 
-{2 Ocsigen}
+{3 Ocsigen}
 
 C.f. {{:http://ocsigen.org}ocsigen.org}.
 {ul 
