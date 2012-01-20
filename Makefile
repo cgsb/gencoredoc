@@ -24,7 +24,7 @@ _build/include.m4:
 	echo 'm4_define(__sequme_doc_path,./sequme)' >> $@
 	echo 'm4_define(__biocaml_doc_path,./biocaml)' >> $@
 
-COMMON_DEPS= _build/include.m4
+COMMON_DEPS= _build/include.m4 
 
 _build/%.pp: src/%.txt $(COMMON_DEPS)
 	$(M4_HTML) $< > $@
@@ -37,22 +37,24 @@ _build/doc/gdcstyle.css: src/style.css
 _build/doc/hitscore/:
 	mkdir -p $@
 	cp -r $(HITSCORE_DOC)/* $@
+	$(M4_HTML)  -D __library_doc=hitscore src/style.css > $@/lib/style.css
 
 _build/doc/biocaml/:
 	mkdir -p $@
 	cp -r $(BIOCAML_DOC)/* $@
+	$(M4_HTML) -D __library_doc=biocaml src/style.css > $@/style.css
 
 _build/doc/sequme/:
 	mkdir -p $@
 	cp -r $(SEQUME_DOC)/* $@
+	$(M4_HTML) -D __library_doc=sequme  src/style.css > $@/style.css
 
 _build/doc/%.html: _build/%.pp $(COMMON_DEPS) 
 	$(OCAMLDOCHTML) -d _build/doc/ -t "GCD:$*" -css-style gdcstyle.css -intro $< -o $*
 
 
-customdoc: $(HTML_FILES) \
-  _build/doc/hitscore/ _build/doc/sequme/ _build/doc/biocaml/ \
-  _build/doc/gdcstyle.css
+customdoc: $(HTML_FILES)  _build/doc/gdcstyle.css \
+  _build/doc/hitscore/ _build/doc/sequme/ _build/doc/biocaml/
 
 clean:
 	rm -fr _build
