@@ -10,6 +10,7 @@ m4_define(__ocaml_keywordsign_color, __ocaml_keyword_color)
 m4_define(__ocaml_string_color, __visited_link_color)
 m4_define(__ocaml_constructor_color, #006600)
 m4_define(__ocaml_type_color, __ocaml_constructor_color)
+m4_define(__ocaml_code_color,#6E3A20)
 
 a:visited {color : __visited_link_color; text-decoration : none; }
 a:link {color : __link_color; text-decoration : none;}
@@ -26,7 +27,7 @@ a:active {color : Red; text-decoration : underline; }
 .warning { color : Red ; font-weight : bold }
 .info { margin-left : 3em; margin-right : 3em; }
 .param_info { margin-top: 4px; margin-left : 3em; margin-right : 3em }
-.code { color : #465F91 ; }
+.code { color : __ocaml_code_color; }
 
 em { font-family: Monospace; font-style: normal; color: __pre_color; }
 
