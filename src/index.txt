@@ -4,14 +4,18 @@
 
 Links: {ul
   {li {b Biocaml}: {ul
+      {li Web: {{:http://biocaml.org/}biocaml.org}}
+      {li Source: {{:https://github.com/agarwal/biocaml}github/biocaml}}
       {- {{:__biocaml_doc_path/index.html}Documentation of the library}}
     }
   }
   {li {b Sequme}: {ul
+      {li Source: {{:https://github.com/agarwal/sequme}github/sequme}}
       {- {{:__sequme_doc_path/index.html}Documentation of the library}}
     }
   }
   {li {b Hitscore}: {ul
+      {li Source: {{:https://github.com/agarwal/hitscore}github/hitscore}}
       {li {{:__hitscore_doc_path/lib/index.html}Documentation of the Hitscore library}}
       {li {{:__hitscore_doc_path/hitscore_layout_digraph.png}The Layout}
           ({{:__hitscore_doc_path/hitscore_layout_digraph.pdf}pdf})}
@@ -36,8 +40,13 @@ Links: {ul
                   }Bcl_to_fastq}}
             }
         }
-     }
-  }
+     }}
+  {li {b Hitscoreweb}: {ul
+      {li Source: {{:https://github.com/agarwal/hitscoreweb}github/hitscoreweb}}
+      }}
+  {li {b Gencoredoc}: {ul
+      {li Source: {{:https://github.com/agarwal/gencoredoc}github/gencoredoc}}
+      }}
 }
 
 {{:ocaml_links.html}OCaml links}
