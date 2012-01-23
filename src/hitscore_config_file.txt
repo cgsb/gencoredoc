@@ -1,0 +1,49 @@
+
+{2 Hitscore configuration file}
+
+The default path is: {e ~/.config/hitscore/config.sexp}, but the {e
+hitscore} and {e hitscoreweb} commands can be called with a different
+path ({e ':'} is the separator), e.g.:
+{[
+hitscore myfile.sexp:specialprofile <command> ...
+]}
+
+{3 Examples}
+
+This one defines one {i profile} “{e test}”, Hitscore will in that
+case use the local/default database of the user:
+{[
+(profile test
+ (root "/tmp/zz_hs_root"
+  (writers smondet root)
+  (group admin))
+ (work "/tmp/zz_hs_work/")
+ )
+]}
+
+A good configuration file on Bowery would be:
+{[
+(profile dev 
+         (root "/scratch/sm4431/gencore-dev/"
+           (writers sm4431 aa144)
+           (group cgsb))
+         (work "/scratch/sm4431/gencorework-dev/")
+         (db 
+          (host "pg.bio.nyu.edu")
+          (port 5432)
+          (database "hitscore-dev")
+          (username "hitscore-dev")
+          (password "very long secret")))
+
+(profile production 
+         (root "/data/cgsb/gencore/"
+           (writers sm4431 aa144)
+           (group cgsb))
+         (work "/scratch/sm4431/gencorework/")
+         (db 
+          (host "pg.bio.nyu.edu")
+          (port 5432)
+          (database "hitscore")
+          (username "hitscore")
+          (password "very long secret")))
+]}

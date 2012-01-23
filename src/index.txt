@@ -17,7 +17,8 @@ Links: {ul
           ({{:__hitscore_doc_path/hitscore_layout_digraph.pdf}pdf})}
       {li {{:__hitscore_doc_path/hitscore_db_digraph.png}The Database Schema}
           ({{:__hitscore_doc_path/hitscore_db_digraph.pdf}pdf})}
-      {li {{:hitscore_migration.html}Notes on migrations.}}
+      {li {{:hitscore_migration.html}Notes on {b migrations}.}}
+      {li {{:hitscore_config_file.html}Notes on the {b configuration file}.}}
       {li
           {{:__hitscore_doc_path/lib/Hitscore_interfaces.IO_CONFIGURATION.html
             }IO_CONFIGURATION} is the main argument of
