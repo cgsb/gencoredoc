@@ -32,6 +32,8 @@ Links: {ul
                   }Result_IO: RESULT_IO}}
             {li {{:__hitscore_doc_path/lib/Hitscore_interfaces.CONFIGURATION.html
                   }Configuration: CONFIGURATION} (thread agnostic)}
+            {li {{:__hitscore_doc_path/lib/Hitscore_interfaces.ACL.html
+                  }ACL: ACL}}
             {li {{:__hitscore_doc_path/lib/Hitscore_db_access.Make.html
                   }Layout}}
             {li {{:__hitscore_doc_path/lib/Hitscore_assemble_sample_sheet.Make.html
