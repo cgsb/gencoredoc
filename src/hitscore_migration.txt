@@ -8,7 +8,7 @@ Follow the following steps to do in order to switch to a new version
   {li switch the version to {e V.W} {ul
       {li In the {e _oasis} file (requires an {e ocaml setup.ml -distclean})}
       {li in the migrator: {e mk} script (with the {i future} {e vV.W} git
-      tag), and in the source (while outputting version field of the S-Exp)}}}
+      tag), and in the source ({b not anymore from {e 0.3-dev}})}}}
   {li merge to {e master}}
   {li {e git tag -a vV.W -m '...'}}
   {li With the previous version of {e hitscore}: {ul
