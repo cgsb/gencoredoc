@@ -71,6 +71,8 @@ v}
 
 C.f. {{:http://ocsigen.org}ocsigen.org}.
 {ul 
+  {li {{:https://sympa.mancoosi.univ-paris-diderot.fr/wws/arc/ocsigen}Mailing-list archives}
+      {{:https://ocsigen.org/trac/}/trac}}
   {li {{:http://ocsigen.org/ocsigenserver/manual/config}Configuration file doc}}
   {li {{:http://ocsigen.org/lwt/manual/}Lwt manual}}
   {li {{:http://ocsigen.org/darcsweb/?r=lwt;a=tree}sources}}
