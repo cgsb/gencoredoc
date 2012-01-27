@@ -101,3 +101,18 @@ module XML = struct
     input_doc_tree ~el ~data i
 end
 ]}
+
+
+{3 OCaml-PAM}
+
+PAM: ({{:http://en.wikipedia.org/wiki/Pluggable_Authentication_Modules}Pluggable
+authentication modules}).
+
+{{:http://sharvil.nanavati.net/projects/ocamlpam/}ocaml-pam}
+1.1 was imported {b and patched} in Hitscoreweb for testing:
+{ul
+  {li {{:http://sharvil.nanavati.net/projects/ocamlpam/files/README.txt}README}}
+  {li {{:http://ocsigen.org/darcsweb/?r=ocsimore;a=plainblob;f=/src/user/ocsimore_pam.ml}ocsimore_pam.ml} (ocsigen.org)}
+  {li {e {{:http://linux.die.net/man/3/pam_start}pam_start(3)}},
+      {e {{:http://linux.die.net/man/3/pam_authenticate}pam_authenticate(3)}}}
+}
