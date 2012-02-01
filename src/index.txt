@@ -40,6 +40,8 @@ Links: {ul
                   }Assemble_sample_sheet}}
             {li {{:__hitscore_doc_path/lib/Hitscore_bcl_to_fastq.Make.html
                   }Bcl_to_fastq}}
+            {li {{:__hitscore_doc_path/lib/Hitscore_interfaces.HISEQ_RAW.html
+                  }Hiseq_raw: HISEQ_RAW}  (thread agnostic)}
             }
         }
      }}
