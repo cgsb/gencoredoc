@@ -8,7 +8,7 @@ Follow the following steps to do in order to switch to a new version
   {li switch the version to {e V.W} {ul
       {li In the {e _oasis} file (requires an {e ocaml setup.ml -distclean})}
       {li in the migrator: {e mk} script (with the {i future} {e vV.W} git
-      tag), and in the source ({b not anymore from {e 0.3-dev}})}}}
+      tag)}}}
   {li merge to {e master}}
   {li {e git tag -a vV.W -m '...'}}
   {li With the previous version of {e hitscore}: {ul
@@ -17,5 +17,5 @@ Follow the following steps to do in order to switch to a new version
       {li {e _migrator/migrator vPrev-vV.W hitscore_dump.sexp hitscore_to_load.sexp}}
       {li {e hitscore production wenv 'make dbupdate'} {i (or re-init
           the DB in some other way)}}
-      {li {e hitscore dev load-file hitscore_load.sexp}}}}
+      {li {e hitscore production load-file hitscore_load.sexp}}}}
 }
