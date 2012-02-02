@@ -4,7 +4,8 @@
 {3 Core}
 
 Hitscore and hiscoreweb use 
-{{:http://ocaml.janestreet.com/?q=node/13}Jane St's Core}: {ul
+{{:http://ocaml.janestreet.com/?q=node/13}Jane St's Core}
+({{:https://bitbucket.org/yminsky/ocaml-core/overview}sources}): {ul
   {li {{:http://www.janestreet.com/ocaml/doc/core/index.html}Index of the documentation}}
   {li
      {{:http://www.janestreet.com/ocaml/doc/core/Std.html}Core.Std},
