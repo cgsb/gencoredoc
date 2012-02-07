@@ -6,7 +6,8 @@ Follow the following steps to do in order to switch to a new version
 {e V.W}:
 {ul
   {li switch the version to {e V.W} {ul
-      {li In the {e _oasis} file (requires an {e ocaml setup.ml -distclean})}
+      {li In the {e _oasis} file (requires an {e ocaml setup.ml -distclean},
+      and an {b {e oasis setup}})}
       {li in the migrator: {e mk} script (with the {i future} {e vV.W} git
       tag)}}}
   {li merge to {e master}}
