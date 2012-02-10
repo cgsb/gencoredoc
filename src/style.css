@@ -60,6 +60,9 @@ pre, code { font-family: Monospace }
 .paramstable { border-style : hidden ; padding: 5pt 5pt}
 
 body { 
+max-width: 60em;
+margin-left: auto;
+margin-right: auto;
     background-color: 
 m4_ifdef(<@__library_doc@>,,#fff)
 m4_ifelse(__library_doc,<@biocaml@>,#B4C8B1)
