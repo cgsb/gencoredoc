@@ -46,6 +46,9 @@ Links: {ul
                   }Hiseq_raw: HISEQ_RAW}  (thread agnostic)}
             {li {{:__hitscore_doc_path/lib/Hitscore_interfaces.B2F_UNALIGNED.html
                   }B2F_unaligned: B2F_UNALIGNED}  (thread agnostic)}
+            {li {{:__hitscore_doc_path/lib/Hitscore_function_interfaces.UNALIGNED_DELIVERY.html
+                  }Unaligned_delivery: UNALIGNED_DELIVERY}
+                  ({{:__hitscore_doc_path/lib/code_Hitscore_function_interfaces.html}module type})}
             }}
         }
      }}
