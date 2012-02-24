@@ -1,0 +1,23 @@
+
+{2 Some Development Notes}
+
+{3 Interesting Commits}
+
+{4 On Example}
+
+The example of the intensities deletion registration:
+{{:https://github.com/agarwal/hitscore/compare/56e27fa7d1...3f0eba2851}56e27fa7d1...3f0eba2851}.
+
+The commit
+{{:https://github.com/agarwal/hitscore/commit/74d7e7a858f3fc5c51d1a49492f279c7ba707bd8}74d7e7a}
+starts a new function implementation (add to {e _oasis}, create the
+functor, its type, and links it in {e hitscore.ml/mli}.
+
+The commit
+{{:https://github.com/agarwal/hitscore/commit/c9ac52adf456bb495427bac48f0ca5f0a56d9634}c9ac52a}
+adds a HiSeq-raw availability check in {e Delete_intensities.register}
+(this will move somewhere else in the future).
+
+The commit
+{{:https://github.com/agarwal/hitscore/commit/5aacab5e68c4e1cf053f15f03dd262ece9a748d8}5aacab5}
+adds a new command-line command ({e "delete-intensities"} or {e "di"}).
