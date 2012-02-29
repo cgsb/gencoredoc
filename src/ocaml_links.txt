@@ -75,13 +75,15 @@ C.f. {{:http://ocsigen.org}ocsigen.org}.
   {li {{:https://sympa.mancoosi.univ-paris-diderot.fr/wws/arc/ocsigen}Mailing-list archives}
       {{:https://ocsigen.org/trac/}/trac}}
   {li {{:http://ocsigen.org/ocsigenserver/manual/config}Configuration file doc}}
-  {li {{:http://ocsigen.org/lwt/manual/}Lwt manual}}
-  {li {{:http://ocsigen.org/darcsweb/?r=lwt;a=tree}sources}}
-  {li About Open-ID:{ul
-      {li {e Eliom_openid}
-          {{:http://ocsigen.org/eliom/api/server/Eliom_openid}doc}, 
-          {{:http://ocsigen.org/darcsweb/?r=eliom-2.0;a=tree;f=/src/server/extensions}sources}}
-      }}
+  {li Lwt: 
+    {{:http://ocsigen.org/lwt/manual/}manual}
+    {{:http://ocsigen.org/darcsweb/?r=lwt;a=tree}sources}}
+  {li Eliom
+    {{:http://ocsigen.org/eliom/manual/}manual}}.
+  {li js_of_ocaml:
+    {{:http://ocsigen.org/js_of_ocaml/manual/}manual},
+    {{:http://ocsigen.org/oclosure/dev/manual/}o'closure manual}
+    ({{:http://closure-library.googlecode.com/svn/docs/index.html}goog.*})}
   {li TyXML:
       {{:http://ocsigen.org/tyxml/api/HTML5.M}Html5},
       {{:http://ocsigen.org/tyxml/api/Simplexmlparser}Simplexmlparser}}
