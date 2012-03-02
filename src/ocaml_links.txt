@@ -83,7 +83,12 @@ C.f. {{:http://ocsigen.org}ocsigen.org}.
   {li js_of_ocaml:
     {{:http://ocsigen.org/js_of_ocaml/manual/}manual},
     {{:http://ocsigen.org/oclosure/dev/manual/}o'closure manual}
-    ({{:http://closure-library.googlecode.com/svn/docs/index.html}goog.*})}
+    ({{:http://closure-library.googlecode.com/svn/docs/index.html}goog.*}),
+    {{:http://reference.sitepoint.com/javascript/DOMException}DOM-exceptions},
+    {{:http://closure-library.googlecode.com/svn/trunk/closure/goog/demos/menu.html}Goog.Ui.Menu
+    demos},
+    {{:http://ocsigen.org/darcsweb/?r=oclosure;a=tree;f=/examples}O'Closure examples}
+  }
   {li TyXML:
       {{:http://ocsigen.org/tyxml/api/HTML5.M}Html5},
       {{:http://ocsigen.org/tyxml/api/Simplexmlparser}Simplexmlparser}}
