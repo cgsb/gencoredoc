@@ -17,7 +17,7 @@ M4_HTML=m4 -P _build/include.m4
 OCAMLDOCHTML=ocamlfind ocamldoc -html -colorize-code -charset utf8 -index-only
 
 _build/include.m4:
-	mkdir -p _build/doc/
+	mkdir -p _build/doc/img/
 	echo 'm4_changequote(<@,@>)' > $@
 	echo "m4_changecom(\`@@')" >> $@
 	echo 'm4_define(__hitscore_doc_path,./hitscore)' >> $@
@@ -29,9 +29,10 @@ COMMON_DEPS= _build/include.m4
 _build/%.pp: src/%.txt $(COMMON_DEPS)
 	$(M4_HTML) $< > $@
 
-
+IMG_SOURCES=$(basename $(shell find src/img/ -name "*.svg" -exec basename {} \;))
 SOURCES=$(basename $(shell find src/ -name "*.txt" -exec basename {} \;))
 
+PNG_FILES= $(addprefix _build/doc/img/, $(addsuffix .png, $(IMG_SOURCES)))
 HTML_FILES= $(addprefix _build/doc/, $(addsuffix .html, $(SOURCES)))
 
 _build/doc/gdcstyle.css: src/style.css
@@ -55,8 +56,10 @@ _build/doc/sequme/:
 _build/doc/%.html: _build/%.pp $(COMMON_DEPS) 
 	$(OCAMLDOCHTML) -d _build/doc/ -t "GCD:$*" -css-style gdcstyle.css -intro $< -o $*
 
+_build/doc/img/%.png: src/img/%.svg
+	inkscape -z -e $@ $<
 
-customdoc: $(HTML_FILES)  _build/doc/gdcstyle.css \
+customdoc: $(HTML_FILES) $(PNG_FILES) _build/doc/gdcstyle.css \
   _build/doc/hitscore/ _build/doc/sequme/ _build/doc/biocaml/
 
 clean:
