@@ -1,0 +1,121 @@
+
+{2 Installation of The Software Stack}
+
+
+{3 External Dependencies}
+
+{4 For Biocaml/Sequme/Hitscore}
+
+Get libs:
+{v
+godi_perform \
+  -build godi-janestreet-core-extended \
+  -build godi-ocaml-csv \
+  -build godi-getopt \
+  -build godi-sqlite3 \
+  -build godi-pgocaml
+v}
+
+Get batteries from
+{{:https://github.com/ocaml-batteries-team/batteries-included}github}.
+
+{4 For Hiscoreweb}
+
+You need {e darcs} in the {e $PATH}.
+
+Go to {{:http://ocsigen.org/bundle}ocsigen.org/bundle}, follow the
+instructions (don't forget O'Closure).
+
+{4 For Gencoredoc}
+
+Gencoredoc wants {e ocamldoc}, {e m4}, and {e inkscape} in the {e $PATH}.
+
+{3 Biocaml / Sequme}
+
+Simple projects: clone, configure, make, make install.
+
+
+{3 Hitscore }
+
+{4 Configure}
+{v
+git clone git\@github.com:agarwal/hitscore
+ocaml setup.ml -configure --prefix $HOME/usr
+v}
+
+
+{4 Build}
+
+{b Case A:} You have a local database named like your user, and ready
+to be wiped-out:
+{v
+make dbupdate
+make
+v}
+
+{b Case B:} You have access to {e pg.bio.nyu.edu}, you want to use {e
+hitscore-dev}, and you already have a version of {e hitscore(-v.v)} installed
+and {{:hitscore_config_file.html}configured} somewhere in {e $PATH}:
+{v
+hitscore(-v.v) dev wenv 'make dbupdate'
+hitscore(-v.v) dev wenv 'make'
+v}
+
+{b Case C:} You have access to {e pg.bio.nyu.edu}, you want to use {e
+hitscore-dev}, but you don't already have a version of {e
+hitscore(-v.v)} installed:
+{v
+. pghitscore.env
+v}
+answer with the {e hitscore-dev} database password;
+{v
+make dupdate
+make
+v}
+
+{b Case D:} If you don't have access to {e pg.bio.nyu.edu} and don't
+have a local PG server, here are the options: {ul
+  {li Install a local PG server;
+      {{:ocaml_links.html}configure the database}; go to {i Case A}.}
+  {li SSH to {e hpc.nyu.edu} with a tunnel to {e pg.bio.nyu.edu:5432};
+      go to {i cases B or C} (with maybe some port-number tweaking …).}
+}
+
+{4 Install}
+
+{v
+make install
+make install-version
+v}
+The first one installs the libraries ({e hitscore} and {e
+hitscoregen}) and the {e hitscore} executable (in {e $prefix/bin}, the
+second one (optional) installs the {e hitscore-v.v} executable.
+
+
+{3 Hitscoreweb}
+
+To configure, build, and install the libraries
+{e hitscorewebpam} and {e hitscoreweb}, and the executable {e
+hitscoreweb}:
+{v
+git clone git\@github.com:agarwal/hitscoreweb
+ocaml setup.ml -configure --prefix $HOME/usr
+make
+make static
+make install
+v}
+
+The {e make …} commands require a database like for {i Hitscore}
+({i Case C} does not apply, {e hitscore} is a dependency of {i Hitscoreweb}).
+
+{3 Gencoredoc}
+
+Call {e make doc} in {e biocaml/}, {e sequme/}, and {e hitscore/} and
+then type {e make}.
+
+If the directory structure is not the same, set the variables {e
+HITSCORE_DOC}, {e SEQUME_DOC}, and/or {e BIOCAML_DOC} in a file {e
+setup.data}, e.g.:
+{v
+echo 'HITSCORE_DOC = ../../some/special/path/to_hiscore' > setup.data
+v}

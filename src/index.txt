@@ -3,9 +3,12 @@
 {2 NYU CGSB GenomicsCore Computational Infrastructure Documentation}
 
 
-Whole Meta-Project {{:img/project_overview.png}overview}.
+Whole Meta-Project: {ul
+  {li {{:img/project_overview.png}Overview}}
+  {li {{:installation.html}Installation instructions}}
+}
 
-Links: {ul
+Projects: {ul
   {li {b Biocaml}: {ul
       {li Web: {{:http://biocaml.org/}biocaml.org}}
       {li Source: {{:https://github.com/agarwal/biocaml}github/biocaml}}
