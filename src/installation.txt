@@ -91,6 +91,12 @@ The first one installs the libraries ({e hitscore} and {e
 hitscoregen}) and the {e hitscore} executable (in {e $prefix/bin}, the
 second one (optional) installs the {e hitscore-v.v} executable.
 
+{4 Re-Build Special Case}
+
+There is one OASIS special case: if the version number in {e _oasis}
+has changed, a {e make distclean} and re-configuration are needed
+before rebuilding (if not done, the version number will be wrong).
+
 
 {3 Hitscoreweb}
 
