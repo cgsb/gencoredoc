@@ -88,7 +88,7 @@ make install
 make install-version
 v}
 The first one installs the libraries ({e hitscore} and {e
-hitscoregen}) and the {e hitscore} executable (in {e $prefix/bin}, the
+hitscoregen}) and the {e hitscore} executable (in {e $prefix/bin}), the
 second one (optional) installs the {e hitscore-v.v} executable.
 
 {4 Re-Build Special Case}
