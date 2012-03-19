@@ -6,6 +6,7 @@
 Whole Meta-Project: {ul
   {li {{:img/project_overview.png}Overview}}
   {li {{:installation.html}Installation instructions}}
+  {li {{:usage_workflows.html}Usage Workflows}}
 }
 
 Projects: {ul
