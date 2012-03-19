@@ -71,3 +71,31 @@ for now the deletion is manual, but one can register a successful one:
 hitscore production delete-intensities register <nb>
 v}
 where {e <bn>} is an Hiseq-raw directory {e g_id}.
+
+
+{3 Website Deployment}
+
+Go to WSO1.
+
+Pull, compile, and install hitscore and hitscoreweb.
+
+RPMs go to {e in /tmp/hitscorerpmbuild/RPMS/x86_64}.
+{v
+hitscoreweb production rpm -rpm-release 3 -ssl cert.pem privkey-unsec.pem -ssl-dir /etc/gencoressl
+v}
+The release number should be increased every time for a given hitscore
+version.
+
+As root
+{v
+service hitscoreweb stop
+rpm -e hitscoreweb
+rpm -i /tmp/hitscorerpmbuild/RPMS/x86_64/hitscoreweb-0.6-3.x86_64.rpm 
+service hitscoreweb start
+v}
+
+One may use something like this after stopping the service:
+{v
+while true; do echo "Gencore stopped for Maintenance, come back in a few minutes" | nc -l 80 ; done
+v}
+
