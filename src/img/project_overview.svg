@@ -26,7 +26,7 @@
      inkscape:cx="1905.6816"
      inkscape:cy="966.43658"
      inkscape:document-units="px"
-     inkscape:current-layer="layer2"
+     inkscape:current-layer="layer3"
      showgrid="false"
      inkscape:window-width="1564"
      inkscape:window-height="876"
@@ -1035,8 +1035,8 @@
        id="rect3086-9-2-8-9-2-9-77-1-6-4-6"
        width="355.76428"
        height="87.993912"
-       x="-1651.2998"
-       y="1420.1709"
+       x="-866.99231"
+       y="1233.0378"
        ry="22.195034" />
     <rect
        style="fill:#e5ff00;fill-opacity:0.35849059;stroke:#000000;stroke-width:6.89637327;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline"
@@ -1537,14 +1537,14 @@
     <text
        xml:space="preserve"
        style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-       x="-1641.5625"
-       y="1475.1122"
+       x="-857.255"
+       y="1287.9791"
        id="text5295"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan5297"
-         x="-1641.5625"
-         y="1475.1122">Default_service</tspan></text>
+         x="-857.255"
+         y="1287.9791">Default_service</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
@@ -1672,7 +1672,7 @@
        sodipodi:nodetypes="cc" />
     <path
        style="fill:none;stroke:#ffab00;stroke-width:9.89999962;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-end:url(#Arrow1Sendi);display:inline"
-       d="m -910.86015,502.38501 c 675.32261,464.94978 732.1234,925.40499 740.7874,1202.76019"
+       d="m -910.86015,502.38501 c 675.32261,464.94978 787.16252,669.47309 388.53703,908.30089"
        id="path3892-4-2-4-2-9"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
@@ -1727,5 +1727,24 @@
        id="path3892-4-2-2-5-0-7"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
+    <rect
+       style="fill:#e5ff00;fill-opacity:0.35849059;stroke:#000000;stroke-width:6.89637327;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline"
+       id="rect3086-9-2-8-9-2-9-77-1-6-4-6-5"
+       width="355.76428"
+       height="87.993912"
+       x="-1651.3073"
+       y="1420.6969"
+       ry="22.195034" />
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Sans"
+       x="-1641.5699"
+       y="1475.6382"
+       id="text5295-2"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         x="-1641.5699"
+         y="1475.6382"
+         id="tspan3262">Flowcell_service</tspan></text>
   </g>
 </svg>
