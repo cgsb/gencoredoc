@@ -3,7 +3,7 @@
 
 {3 Interesting Commits}
 
-{4 On Example}
+{4 One Example}
 
 The example of the intensities deletion registration:
 {{:https://github.com/agarwal/hitscore/compare/56e27fa7d1...3f0eba2851}56e27fa7d1...3f0eba2851}.
@@ -21,3 +21,53 @@ adds a HiSeq-raw availability check in {e Delete_intensities.register}
 The commit
 {{:https://github.com/agarwal/hitscore/commit/5aacab5e68c4e1cf053f15f03dd262ece9a748d8}5aacab5}
 adds a new command-line command ({e "delete-intensities"} or {e "di"}).
+
+
+{3 HOWTOs}
+
+{4 Start A New Development Version}
+
+First, start a new branch {e 0.7-dev}. In that branch, change the
+version number in {e _oasis} to {e 0.7-dev}.
+{v
+ $ make clean distclean
+ $ oasis setup
+ $ ocaml setup.ml -configure  ...
+v}
+Also update {e ./src/migrator/mk} to keep only a few recent modules
+plus the new one ({e v07}).
+That script may use {e git checkout}, so commit everything now to
+avoid Git errors.
+
+Then, run {v
+ $ ./src/migrator/mk update
+v}
+and fix {e ./src/migrator/migrator.ml} by adding a function
+[v06_to_v07] (compiled with {e ./src/migrator/mk} which does not use
+Git).
+
+Commit (maybe amend the previous commit to pack things together).
+
+{4 Changing The Layout}
+
+Edit {e data/hitscore_layout}; test the parsing/dbinit with {e make dbupdate}.
+
+Compile (and fix?) hitscore ({e make}).
+
+Update {e ./src/migrator/migrator.ml} (compiled with {e
+./src/migrator/mk}). Generally (adding new records/functions), it is
+just a matter of adding an empty S-Exp:
+{v
+     dump_v06
+     |! add_empty "record_fastx_results"
+     |! add_empty "function_fastx_quality_stats_of_unaligned"
+     |! parse
+v}
+
+One can quickly test: {v
+ $ ./_migrator/migrator v06-v07 some_dump_06.sexp out07.sexp
+ $ hitscore test load-file out07.sexp
+v}
+The migrator already checks that the resulting {e out07.sexp} has the
+right format, doing a full load with an empty database implies more
+checks (unique pointers, etc.).
