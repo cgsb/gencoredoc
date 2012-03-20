@@ -5,23 +5,46 @@
 
 Export the google-doc to CSV.
 
-Test the import:
+Test the import (read the output, check everything):
 {v
-hitscore <profile> pss file.csv
+ $ hitscore <profile> pss file.csv
 v}
 
 Do the real one (check the run-plan for PhiX spike-in):
 {v
-hitscore production -wet-run A:1 B:2 pss.csv
+ $ hitscore production -wet-run A:1 B:2 pss.csv
 v}
 {e A:1 B:2} mean that the pool A has 1% PhiX and the pool B 2%.
 
+Once all the pools are in, check their IDs:
+{v
+ $ hitscore production Q orphan-lanes
+v}
+Register the new flowcell:
+{v
+ $ hitscore production help register-flowcell
+Usage: hitscore <profile> register-flowcell <flowcell-name> <L1> <L2> .. <L8>
+where Lx is 'PhiX', 'Empty', or an orphan lane's id.
+
+ $ hitscore production register-flowcell SERIALCXX PhiX 42 43 Empty 56 57 58 59
+v}
+
+Once we have two flowcells:
+{v
+ $ hitscore production help register-hiseq-run
+Usage: hitscore <profile> register-hiseq-run <date> <fcidA> <fcidB> [<note>]
+  where fcid is a database id, a proper FCID, or '_'
+v}
 
 {3 Hiseq-raw Directories}
 
 As simple as
 {v
-hitscore production register-hiseq-raw /absolute/path/to/111004_SN911_0079_BD053MACXX/
+ $ hitscore production help register-hiseq-raw
+usage: hitscore <profile> register-hiseq-raw [-host <host-addr>] <absolute-path>
+   (default host being bowery.es.its.nyu.edu)
+
+ $ hitscore production register-hiseq-raw /absolute/path/to/111004_SN911_0079_BD053MACXX/
 v}
 
 
@@ -32,12 +55,12 @@ Choose and Hiseq-raw directory (e.g. from the output of register-hiseq-raw, the
 service, or {e select * in hiseq_raw}, …).
 
 {v
-hitscore production bcl-to-fastq start  <nb>
+ $ hitscore production bcl-to-fastq start  <nb>
 v}
 
 See 
 {v
-hitscore production bcl-to-fastq start -help
+ $ hitscore production bcl-to-fastq start -help
 v}
 for options (sample-sheet kind, tiles, wall-hours, etc.).
 
@@ -49,7 +72,7 @@ deliver, then the command {e deliver} to do the actual links with ACLs.
 
 Example delivering C0HYHACXX:
 {v
-$ hitscore production Q deliveries  C0HYHACXX
+ $ hitscore production Q deliveries  C0HYHACXX
 Found 4 invoices:
   10 (to Rockman)
   11 (to Gunsalus)
@@ -68,7 +91,7 @@ v}
 
 for now the deletion is manual, but one can register a successful one:
 {v
-hitscore production delete-intensities register <nb>
+ $ hitscore production delete-intensities register <nb>
 v}
 where {e <bn>} is an Hiseq-raw directory {e g_id}.
 
@@ -81,21 +104,21 @@ Pull, compile, and install hitscore and hitscoreweb.
 
 RPMs go to {e in /tmp/hitscorerpmbuild/RPMS/x86_64}.
 {v
-hitscoreweb production rpm -rpm-release 3 -ssl cert.pem privkey-unsec.pem -ssl-dir /etc/gencoressl
+ $ hitscoreweb production rpm -rpm-release 3 -ssl cert.pem privkey-unsec.pem -ssl-dir /etc/gencoressl
 v}
 The release number should be increased every time for a given hitscore
 version.
 
 As root
 {v
-service hitscoreweb stop
-rpm -e hitscoreweb
-rpm -i /tmp/hitscorerpmbuild/RPMS/x86_64/hitscoreweb-0.6-3.x86_64.rpm 
-service hitscoreweb start
+ # service hitscoreweb stop
+ # rpm -e hitscoreweb
+ # rpm -i /tmp/hitscorerpmbuild/RPMS/x86_64/hitscoreweb-0.6-3.x86_64.rpm 
+ # service hitscoreweb start
 v}
 
 One may use something like this after stopping the service:
 {v
-while true; do echo "Gencore stopped for Maintenance, come back in a few minutes" | nc -l 80 ; done
+ # while true; do echo "Gencore stopped for Maintenance, come back in a few minutes" | nc -l 80 ; done
 v}
 
