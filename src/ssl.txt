@@ -1,0 +1,60 @@
+
+{2 Notes About SSL}
+
+{3 Certificates}
+
+{4 Quick And Dirty}
+
+From {{:http://ocsigen.org/ocsigenserver/manual/config}Ocsigen's
+manual}, a quick and dirty CA+certificate:
+
+{i Use the tools provided by openssl to create a 1024-bit private key
+to use when creating your CA.:}
+{v
+openssl genrsa -des3 -out privkey.pem 1024
+v}
+{i To create a master certificate based on this key, to use when
+signing other certificates:}
+{v
+openssl req -new -x509 -days 1001 -key privkey.pem -out cert.pem
+v}
+{i If you don't want to be asked for a password at start-up, you can
+uncrypt the private key (if you consider it is safe …):}
+{v
+openssl rsa -in privkey.pem -out privkey-unsec.pem
+v}
+
+{4 More Advanced Certificate Authority}
+
+{{:http://www.freebsdmadeeasy.com/tutorials/freebsd/create-a-ca-with-openssl.php}Creating
+an SSL Certificate of Authority}
+
+{3 In OCaml + Core + Lwt}
+
+The Module
+{{:http://ocsigen.org/lwt/api/Lwt_ssl}Lwt_ssl} is minimalistic, it
+requires non-I/O functions from Core's
+{{:http://www.janestreet.com/ocaml/doc/core/Std.Unix.html}Unix module}
+and other things from {e Lwt_unix}
+(like
+{{:http://ocsigen.org/lwt/api/Lwt_unix#TYPEfile_descr}Lwt_unix.file_desrc}).
+Also direct calls to {e ocaml-ssl} are needed (c.f.
+{e
+{{:http://docs.camlcity.org/docs/godipkg/3.11/godi-ocaml-ssl/lib/ocaml/pkg-lib/ssl/ssl.mli}ssl.mli}}).
+
+{e ocaml-ssl} has 
+only one possible
+{e client_verify_callback} (c.f.
+{e {{:http://docs.camlcity.org/docs/godisrc/ocaml-ssl-0.4.4.tar.gz/ocaml-ssl-0.4.4/src/ssl_stubs.c}ssl_stubs.c}}).
+
+{e {{:http://www.manpagez.com/man/3/SSL_CTX_set_verify/}man set_verify}}
+
+Examples in {e ocamlnet}: {ul
+  {li Using client certificates:
+    {e {{:http://docs.camlcity.org/docs/godipkg/3.12/godi-ocamlnet/doc/godi-ocamlnet/examples/rpc/queues/qclient_auth_ssl.ml}qclient_auth_ssl.ml}} / 
+    {e {{:http://docs.camlcity.org/docs/godipkg/3.12/godi-ocamlnet/doc/godi-ocamlnet/examples/rpc/queues/qserver_auth_ssl.ml}qserver_auth_ssl.ml}}
+  }
+  {li Standard HTTPS connection:
+    {e {{:http://docs.camlcity.org/docs/godipkg/3.12/godi-ocamlnet/doc/godi-ocamlnet/examples/equeue/ssl/ssl_client.ml}ssl_client.ml}}
+  }
+}

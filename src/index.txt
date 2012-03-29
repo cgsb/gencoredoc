@@ -77,5 +77,8 @@ Projects: {ul
       }}
 }
 
-{{:ocaml_links.html}OCaml links}
+General documentations: {ul
+  {li {{:ocaml_links.html}OCaml links}}
+  {li {{:ssl.html}SSL Specific Notes}}
+}
 
