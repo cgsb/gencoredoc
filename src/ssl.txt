@@ -29,6 +29,38 @@ v}
 {{:http://www.freebsdmadeeasy.com/tutorials/freebsd/create-a-ca-with-openssl.php}Creating
 an SSL Certificate of Authority}
 
+{{:http://www.octaldream.com/~scottm/talks/ssl/opensslca.html
+}Creating a Certificate Authority and Certificates with OpenSSL}
+
+
+{4 Current Usage}
+
+To create a CA (the path to the script is Ubuntu/Debian specific):
+{v
+mkdir ~/CA ; cd ~/CA
+/usr/lib/ssl/misc/CA.sh -newca
+v}
+It creates everything needed in {e ~/CA/demoCA/}.
+
+
+Then to create {e Server.pem}, {e Client1.pem}, etc.;
+{v
+/usr/lib/ssl/misc/CA.sh -newreq
+/usr/lib/ssl/misc/CA.sh -sign
+openssl rsa -in newkey.pem -out newkey-unsec.pem
+cat newcert.pem newkey-unsec.pem > Server.pem
+v}
+The results contain the certificate and the (unencrypted) private key.
+
+Testing (as of
+{{:https://github.com/agarwal/hitscore/commit/9b0ce371f6cf77b029899890e18fd5f3aabdbd5b
+}9b0ce37}, Thu, 29 Mar 2012 18:29:43 -0400):
+{v
+_build/src/server/test_hitscored ~/CA/Server.pem ~/CA/demoCA/cacert.pem ~/CA/Client1.pem
+v}
+(where it seems that {e ~/CA/demoCA/cacert.pem} is used by OpenSSL to
+check the client certificate).
+ 
 {3 In OCaml + Core + Lwt}
 
 The Module
