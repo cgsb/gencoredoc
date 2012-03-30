@@ -32,8 +32,14 @@ an SSL Certificate of Authority}
 {{:http://www.octaldream.com/~scottm/talks/ssl/opensslca.html
 }Creating a Certificate Authority and Certificates with OpenSSL}
 
+{{:http://tldp.org/HOWTO/SSL-Certificates-HOWTO/x195.html
+}SSL Certificates HOWTO — 2.5. Certificate management}
 
-{4 Current Usage}
+{e man {{:http://www.openssl.org/docs/apps/CA.pl.html}CA.pl}}
+
+{e man {{:http://www.openssl.org/docs/apps/ca.html}openssl ca}}
+
+{4 Notes On Past Usage}
 
 To create a CA (the path to the script is Ubuntu/Debian specific):
 {v
@@ -60,6 +66,16 @@ _build/src/server/test_hitscored ~/CA/Server.pem ~/CA/demoCA/cacert.pem ~/CA/Cli
 v}
 (where it seems that {e ~/CA/demoCA/cacert.pem} is used by OpenSSL to
 check the client certificate).
+
+{4 Current Usage}
+
+Much better:
+import
+{e {{:http://chschneider.eu/linux/scripts/#sslutil}ssl-util.sh}} and
+modify it for the project (c.f. Hitscore's {e src/script/ssl-util.sh}).
+{v
+./src/script/ssl-util.sh help
+v}
  
 {3 In OCaml + Core + Lwt}
 
@@ -71,8 +87,14 @@ and other things from {e Lwt_unix}
 (like
 {{:http://ocsigen.org/lwt/api/Lwt_unix#TYPEfile_descr}Lwt_unix.file_desrc}).
 Also direct calls to {e ocaml-ssl} are needed (c.f.
+{{:http://docs.camlcity.org/docs/godisrc/ocaml-ssl-0.4.4.tar.gz/ocaml-ssl-0.4.4/doc/html/Ssl.html
+}the documentation} or
 {e
-{{:http://docs.camlcity.org/docs/godipkg/3.11/godi-ocaml-ssl/lib/ocaml/pkg-lib/ssl/ssl.mli}ssl.mli}}).
+{{:http://docs.camlcity.org/docs/godipkg/3.11/godi-ocaml-ssl/lib/ocaml/pkg-lib/ssl/ssl.mli
+}ssl.mli}}
+or
+{{:http://savonet.hg.sourceforge.net/hgweb/savonet/savonet/file/fe0747a1045d/ocaml-ssl
+}the sources}).
 
 {e ocaml-ssl} has 
 only one possible
