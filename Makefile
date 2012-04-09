@@ -29,11 +29,18 @@ COMMON_DEPS= _build/include.m4
 _build/%.pp: src/%.txt $(COMMON_DEPS)
 	$(M4_HTML) $< > $@
 
-IMG_SOURCES=$(basename $(shell find src/img/ -name "*.svg" -exec basename {} \;))
-SOURCES=$(basename $(shell find src/ -name "*.txt" -exec basename {} \;))
+_build/%.ppml: src/%.html $(COMMON_DEPS)
+	$(M4_HTML) $< > $@
+
+IMG_SOURCES = $(basename $(shell find src/img/ -name "*.svg" -exec basename {} \;))
+TXT_SOURCES = $(basename $(shell find src/ -name "*.txt" -exec basename {} \;))
+HTM_SOURCES = $(basename $(shell find src/ -name "*.html" -exec basename {} \;))
+SOURCES= $(TXT_SOURCES) $(HTM_SOURCES)
 
 PNG_FILES= $(addprefix _build/doc/img/, $(addsuffix .png, $(IMG_SOURCES)))
-HTML_FILES= $(addprefix _build/doc/, $(addsuffix .html, $(SOURCES)))
+HTML_OF_HTM_FILES= $(addprefix _build/doc/, $(addsuffix .html, $(HTM_SOURCES)))
+HTML_OF_TXT_FILES= $(addprefix _build/doc/, $(addsuffix .html, $(TXT_SOURCES)))
+HTML_FILES = $(HTML_OF_TXT_FILES) $(HTML_OF_HTM_FILES)
 
 _build/doc/gdcstyle.css: src/style.css
 	$(M4_HTML) $< > $@
@@ -53,8 +60,11 @@ _build/doc/sequme/:
 	cp -r $(SEQUME_DOC)/* $@
 	$(M4_HTML) -D __library_doc=sequme  src/style.css > $@/style.css
 
-_build/doc/%.html: _build/%.pp $(COMMON_DEPS) 
+$(HTML_OF_TXT_FILES):_build/doc/%.html: _build/%.pp $(COMMON_DEPS) 
 	$(OCAMLDOCHTML) -d _build/doc/ -t "GCD:$*" -css-style gdcstyle.css -intro $< -o $*
+
+$(HTML_OF_HTM_FILES):_build/doc/%.html: src/%.html src/page_template.tmpl
+	awk -vf2="$$(cat $<)" '/GCD_HTML_TEMPLATE_BODY/{print f2;print;next}1' src/page_template.tmpl > $@
 
 _build/doc/img/%.png: src/img/%.svg
 	inkscape -z -e $@ $<
