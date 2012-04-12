@@ -526,13 +526,15 @@ function addEventListeners() {
 /* Initialization */
 
 function addPrettify() {
+    /*
+
   var els = document.querySelectorAll('pre');
   for (var i = 0, el; el = els[i]; i++) {
     if (!el.classList.contains('noprettyprint')) {
       el.classList.add('prettyprint');
     }
   }
-  
+  */
   var el = document.createElement('script');
   el.type = 'text/javascript';
   el.src = './javascripts/prettify.js';
