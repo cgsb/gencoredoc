@@ -63,13 +63,19 @@ _build/doc/sequme/:
 $(HTML_OF_TXT_FILES):_build/doc/%.html: _build/%.pp $(COMMON_DEPS) 
 	$(OCAMLDOCHTML) -d _build/doc/ -t "GCD:$*" -css-style gdcstyle.css -intro $< -o $*
 
-$(HTML_OF_HTM_FILES):_build/doc/%.html: src/%.html src/page_template.tmpl
-	awk -vf2="$$(cat $<)" '/GCD_HTML_TEMPLATE_BODY/{print f2;print;next}1' src/page_template.tmpl > $@
+$(HTML_OF_HTM_FILES):_build/doc/%.html: src/%.html templates/page_template.tmpl
+	awk -vf2="$$(cat $<)" '/GCD_HTML_TEMPLATE_BODY/{print f2;print;next}1' \
+		templates/page_template.tmpl > $@
 
 _build/doc/img/%.png: src/img/%.svg
 	inkscape -z -e $@ $<
 
-customdoc: $(HTML_FILES) $(PNG_FILES) _build/doc/gdcstyle.css \
+slides: src/slides.html templates/slides/index.html
+	rm -fr _build/slides/ && cp -r templates/slides/ _build/doc/
+	awk -vf2="$$(cat $<)" '/GCD_HTML_TEMPLATE_BODY/{print f2;print;next}1' \
+		templates/slides/index.html > _build/doc/slides/index.html
+
+customdoc: $(HTML_FILES) $(PNG_FILES) _build/doc/gdcstyle.css slides \
   _build/doc/hitscore/ _build/doc/sequme/ _build/doc/biocaml/
 
 clean:
