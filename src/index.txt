@@ -85,3 +85,7 @@ General documentations: {ul
   {li {{:ssl.html}SSL Specific Notes}}
 }
 
+Presentations: {ul
+  {li Slides SM01, about Lwt, {e hitscoregen}, …:
+    ({{:slides_SM01.html}raw} — {{:slides/SM01.html}pretty})}
+}

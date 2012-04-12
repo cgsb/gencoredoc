@@ -1,0 +1,85 @@
+
+<article>
+  <h1>Bonneau Lab Meeting</h1>
+  
+  <p> Sebastien Mondet <br/>
+    Mon, 16 Apr 2012 09:00:00 -0400
+  </p>
+</article>
+
+
+<article>
+  
+  <h3>Asynchronous Programming — Why</h3>
+
+<p>I/O intensive software,
+  compute stuff and interact with:</p>
+<ul>
+  <li> the kernel, by doing system calls </li>
+  <li> the user, by reading the keyboard, the mouse, or any input device </li>
+  <li> a graphical server, to build graphical user interface </li>
+  <li> other computers, by using the network </li>
+  <li>…</li>
+</ul>
+  
+</article>
+
+<article>
+  <h3>Asynchronous Programming — Why</h3>
+<p>Classical solutions:</p>
+
+<ul class="build">
+  <li>
+    <strong>“old-school-style”:</strong>
+    using a <em>main loop</em> (<code>man select</code>)<br/>
+    ⇒ all components must go with into this main loop<br/>
+    ⇒ does not scale
+  </li>
+  <li>
+    <strong>“C++-style”:</strong>
+    using preemptive system threads (e.g. POSIX)<br/>
+    ⇒ no human brain can handle shared memory multi-processing<br/>
+    ⇒ more bugs than features
+  </li>
+</ul>
+</article>
+
+<article>
+  <h3>Lwt — Light-Weight Cooperative Threads In OCaml</h3>
+
+  <p>The idea:</p>
+
+  <ul>
+    <li>very light program-level threads</li>
+    <li>“launching” a thread is a very fast operation</li>
+    <li>no new stack, no new process, nor anything else</li>
+    <li>context switches are very cheap</li>
+  </ul>
+  <p> ⇒ launch a thread for every system call (don't block)</p>
+  <p> ⇒ compose cooperative threads (use <em>Monads</em>)</p>
+
+  <!-- will allow us to write highly asynchronous programs. -->
+
+</article>
+
+
+<article >
+  
+  <h3>Project Overview</h3>
+  <p>
+    <a href="../img/project_overview.png">
+    <img src="../img/project_overview.png"  class="centered" width="100%"></img>
+    </a>
+  </p>
+</article>
+
+<article>
+  <h3>Abstracting The I/O</h3>
+  <iframe src="../sequme/Sequme_flow_monad.IO_CONFIGURATION.html"></iframe>
+</article>
+
+<article>
+  <h3>The Flow Monad</h3>
+  <iframe src="../sequme/Sequme_flow_monad.FLOW_MONAD.html"></iframe>
+</article>
+
