@@ -12,36 +12,36 @@
   
   <h3>Asynchronous Programming — Why</h3>
 
-<p>I/O intensive software,
-  compute stuff and interact with:</p>
-<ul>
-  <li> the kernel, by doing system calls </li>
-  <li> the user, by reading the keyboard, the mouse, or any input device </li>
-  <li> a graphical server, to build graphical user interface </li>
-  <li> other computers, by using the network </li>
-  <li>…</li>
-</ul>
+  <p>I/O intensive software,
+    compute stuff and interact with:</p>
+  <ul>
+    <li> the kernel, by doing system calls </li>
+    <li> the user, by reading the keyboard, the mouse, or any input device </li>
+    <li> a graphical server, to communicate with a GUI </li>
+    <li> other computers, by using the network </li>
+    <li><strong>…</strong></li>
+  </ul>
   
 </article>
 
 <article>
   <h3>Asynchronous Programming — Why</h3>
-<p>Classical solutions:</p>
-
-<ul class="build">
-  <li>
-    <strong>“old-school-style”:</strong>
-    using a <em>main loop</em> (<code>man select</code>)<br/>
-    ⇒ all components must go with into this main loop<br/>
-    ⇒ does not scale
-  </li>
-  <li>
-    <strong>“C++-style”:</strong>
-    using preemptive system threads (e.g. POSIX)<br/>
-    ⇒ no human brain can handle shared memory multi-processing<br/>
-    ⇒ more bugs than features
-  </li>
-</ul>
+  <p>Classical solutions:</p>
+  
+  <ul class="build">
+    <li>
+      <strong>“old-school-style”:</strong>
+      using a <em>main loop</em> (<code>man select</code>)<br/>
+      ⇒ all components must go with into this main loop<br/>
+      ⇒ does not scale
+    </li>
+    <li>
+      <strong>“C++-style”:</strong>
+      using preemptive system threads (e.g. POSIX)<br/>
+      ⇒ no human brain can handle shared memory multi-processing<br/>
+      ⇒ more bugs than features
+    </li>
+  </ul>
 </article>
 
 <article>
@@ -57,11 +57,24 @@
   </ul>
   <p> ⇒ launch a thread for every system call (don't block)</p>
   <p> ⇒ compose cooperative threads (use <em>Monads</em>)</p>
-
+  <hr/>
+  <a href="http://ocsigen.org/lwt/manual/">http://ocsigen.org/lwt/manual/</a>
+  <br/>
+  <a href="http://www.openmirage.org/wiki/tutorial-lwt">http://www.openmirage.org/wiki/tutorial-lwt</a>
   <!-- will allow us to write highly asynchronous programs. -->
-
 </article>
 
+<article>
+  <style>
+    .okwd { color: blue }
+    .omod { color: green }
+  </style>
+  <div><pre><code><span class="okwd">val</span> return<span class="okwd">:</span> 'a <span class="okwd">-&gt;</span> 'a <span class="omod">Lwt.</span>t
+</code></pre></div>
+
+
+  <pre><code><span class="okwd">val</span> bind<span class="okwd">:</span> 'a <span class="omod">Lwt.</span>t <span class="okwd">-&gt;</span> <span class="okwd">(</span>'a <span class="okwd">-&gt;</span> 'b <span class="omod">Lwt.</span>t<span class="okwd">)</span> <span class="okwd">-&gt;</span> 'b <span class="omod">Lwt.</span>t</code></pre>
+</article>
 
 <article >
   
