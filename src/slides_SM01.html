@@ -30,13 +30,13 @@
   
   <ul class="build">
     <li>
-      <strong>“old-school-style”:</strong>
+      <strong>“old-school style”:</strong>
       using a <em>main loop</em> (<code>man select</code>)<br/>
       ⇒ all components must go with into this main loop<br/>
       ⇒ does not scale
     </li>
     <li>
-      <strong>“C++-style”:</strong>
+      <strong>“C++ style”:</strong>
       using preemptive system threads (e.g. POSIX)<br/>
       ⇒ no human brain can handle shared memory multi-processing<br/>
       ⇒ more bugs than features
@@ -65,16 +65,70 @@
 </article>
 
 <article>
-  <style>
-    .okwd { color: blue }
-    .omod { color: green }
-  </style>
-  <div><pre><code><span class="okwd">val</span> return<span class="okwd">:</span> 'a <span class="okwd">-&gt;</span> 'a <span class="omod">Lwt.</span>t
-</code></pre></div>
+  <h3>Lwt — It's a Monad!</h3>
 
+<div class="build">
+<pre># <span style="color:#0033cc">Lwt</span>.return;;
+- : 'a -&gt; 'a <span style="color:#0033cc">Lwt</span>.t = &lt;<span style="color:green">fun</span>&gt;
+# <span style="color:#0033cc">Lwt</span>.bind;;
+- : 'a <span style="color:#0033cc">Lwt</span>.t -&gt; ('a -&gt; 'b <span style="color:#0033cc">Lwt</span>.t) -&gt; 'b <span style="color:#0033cc">Lwt</span>.t = &lt;<span style="color:green">fun</span>&gt;
+</pre>
 
-  <pre><code><span class="okwd">val</span> bind<span class="okwd">:</span> 'a <span class="omod">Lwt.</span>t <span class="okwd">-&gt;</span> <span class="okwd">(</span>'a <span class="okwd">-&gt;</span> 'b <span class="omod">Lwt.</span>t<span class="okwd">)</span> <span class="okwd">-&gt;</span> 'b <span class="omod">Lwt.</span>t</code></pre>
+<pre># <span style="color:green">let</span> m =
+  <span style="color:#0033cc">Lwt</span>.bind (<span style="color:#0033cc">Lwt_io</span>.read_char <span style="color:#0033cc">Lwt_io</span>.stdin) (<span style="color:green">fun</span> s -&gt;
+    <span style="color:#0033cc">Lwt</span>.return (int_of_char s));;
+<span style="color:green">val</span> m : int <span style="color:#0033cc">Lwt</span>.t = &lt;abstr&gt;
+</pre>
+<div>
+<hr/>
+<quote>The name is taken from the mathematical monad construct in category
+theory, though the two concepts are not identical.</quote>
+<small>
+  <code><a href="http://en.wikipedia.org/wiki/Monad_(functional_programming)"
+   >http://en.wikipedia.org/wiki/Monad_(functional_programming)</a></code>
+<br/>
+<code><a href="http://en.wikipedia.org/wiki/Monad_(category_theory)"
+   >http://en.wikipedia.org/wiki/Monad_(category_theory)</a></code>
+</small>
+</div>
+</div> 
 </article>
+
+<article>
+  <h3>Lwt —  Monad + Threading API</h3>
+
+<div class="box">
+<pre># <span style="color:#0033cc">Lwt</span>.join;;
+- : unit <span style="color:#0033cc">Lwt</span>.t list -&gt; unit <span style="color:#0033cc">Lwt</span>.t = &lt;<span style="color:green">fun</span>&gt;
+</pre>
+  <p>Wait for a list of threads to terminate.</p>
+</div>
+
+<div class="box">
+<pre># <span style="color:#0033cc">Lwt</span>.choose;;
+- : 'a <span style="color:#0033cc">Lwt</span>.t list -&gt; 'a <span style="color:#0033cc">Lwt</span>.t = &lt;<span style="color:green">fun</span>&gt;
+</pre>
+
+  <p>Behave as the first thread in l to terminate.</p>
+
+</div>
+
+<div class="box">
+<pre># <span style="color:#0033cc">Lwt_list</span>.map_p;;
+- : ('a -&gt; 'b <span style="color:#0033cc">Lwt</span>.t) -&gt; 'a list -&gt; 'b list <span style="color:#0033cc">Lwt</span>.t = &lt;<span style="color:green">fun</span>&gt;
+</pre>
+   <p>Apply function <em>concurrently</em> and get the list of results.</p>
+</div>
+  
+
+</article>
+
+
+<article>
+  <h3>Lwt — Comes With Term I/O, Networking, SSL, Glib/GTK</h3>
+  <iframe src="http://ocsigen.org/lwt/manual/">Some Text.</iframe>
+</article>
+
 
 <article >
   
