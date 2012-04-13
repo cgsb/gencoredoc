@@ -344,6 +344,13 @@ h3 {
   /* border: #0C180B solid 2px; */
   border-radius: 5px;
 }
+.box {
+  border-radius: 9px;
+  border: rgb(100,100,100) solid 2px;
+  margin: 20px;
+  padding-left:  7px;
+  padding-right: 7px;
+}
 
 article.fill h3 {
   background: rgba(255, 255, 255, .75);
@@ -493,6 +500,38 @@ th {
   line-height: 18px;
 }
 
+quote {
+  display: block;
+  /* font-size: ; */
+  /* line-height: 72px; */
+  
+  margin-left: 20px;
+  /* margin-top: 100px; */
+  margin-right: 20px;    
+  font-style: italic;
+}
+quote::before {
+  content: '“';
+  
+  position: absolute;
+  display: inline-block;
+  margin-left: -2.1em;
+  width: 2em;
+  text-align: right;
+ font-weight: bold; 
+  /* font-size: 90px; */
+  color: rgb(100, 100, 100);
+}
+quote::after {
+  content: '”';
+
+  position: absolute;  
+  margin-left: .1em;
+ font-weight: bold; 
+
+  /* font-size: 90px; */
+  color: rgb(100, 100, 100);  
+}
 q {
   display: block;
   font-size: 60px;
