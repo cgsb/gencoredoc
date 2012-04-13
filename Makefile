@@ -71,7 +71,7 @@ _build/doc/img/%.png: src/img/%.svg
 	inkscape -z -e $@ $<
 
 slides_SM01: src/slides_SM01.html templates/slides/index.html
-	rm -fr _build/slides/ && cp -r templates/slides/ _build/doc/
+	rm -fr _build/slides/ && cp -r templates/slides _build/doc/
 	awk -vf2="$$(cat $<)" '/GCD_HTML_TEMPLATE_BODY/{print f2;print;next}1' \
 		templates/slides/index.html > _build/doc/slides/SM01.html
 
