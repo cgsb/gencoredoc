@@ -32,12 +32,14 @@ _build/%.pp: src/%.txt $(COMMON_DEPS)
 _build/%.ppml: src/%.html $(COMMON_DEPS)
 	$(M4_HTML) $< > $@
 
-IMG_SOURCES = $(basename $(shell find src/img/ -name "*.svg" -exec basename {} \;))
+SVG_SOURCES = $(basename $(shell find src/img/ -name "*.svg" -exec basename {} \;))
+PNG_SOURCES = $(basename $(shell find src/img/ -name "*.png" -exec basename {} \;))
 TXT_SOURCES = $(basename $(shell find src/ -name "*.txt" -exec basename {} \;))
 HTM_SOURCES = $(basename $(shell find src/ -name "*.html" -exec basename {} \;))
 SOURCES= $(TXT_SOURCES) $(HTM_SOURCES)
 
-PNG_FILES= $(addprefix _build/doc/img/, $(addsuffix .png, $(IMG_SOURCES)))
+PNG_FILES= $(addprefix _build/doc/img/, $(addsuffix .png, $(SVG_SOURCES))) \
+	   $(addprefix _build/doc/img/, $(addsuffix .png, $(PNG_SOURCES)))
 HTML_OF_HTM_FILES= $(addprefix _build/doc/, $(addsuffix .html, $(HTM_SOURCES)))
 HTML_OF_TXT_FILES= $(addprefix _build/doc/, $(addsuffix .html, $(TXT_SOURCES)))
 HTML_FILES = $(HTML_OF_TXT_FILES) $(HTML_OF_HTM_FILES)
@@ -69,6 +71,9 @@ $(HTML_OF_HTM_FILES):_build/doc/%.html: src/%.html templates/page_template.tmpl
 
 _build/doc/img/%.png: src/img/%.svg
 	inkscape -z -e $@ $<
+
+_build/doc/img/%.png: src/img/%.png
+	cp $< $@
 
 slides_SM01: src/slides_SM01.html templates/slides/index.html
 	rm -fr _build/slides/ && cp -r templates/slides _build/doc/

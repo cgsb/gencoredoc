@@ -55,7 +55,8 @@
     <li>no new stack, no new process, nor anything else</li>
     <li>context switches are very cheap</li>
   </ul>
-  <p> ⇒ launch a thread for every system call (don't block)</p>
+  <p> ⇒ launch a thread for every system call<br/>
+    (don't block — don't get preempted)</p>
   <p> ⇒ compose cooperative threads (use <em>Monads</em>)</p>
   <hr/>
   <a href="http://ocsigen.org/lwt/manual/">http://ocsigen.org/lwt/manual/</a>
@@ -68,17 +69,25 @@
   <h3>Lwt — It's a Monad!</h3>
 
 <div class="build">
-<pre># <span style="color:#0033cc">Lwt</span>.return;;
-- : 'a -&gt; 'a <span style="color:#0033cc">Lwt</span>.t = &lt;<span style="color:green">fun</span>&gt;
-# <span style="color:#0033cc">Lwt</span>.bind;;
-- : 'a <span style="color:#0033cc">Lwt</span>.t -&gt; ('a -&gt; 'b <span style="color:#0033cc">Lwt</span>.t) -&gt; 'b <span style="color:#0033cc">Lwt</span>.t = &lt;<span style="color:green">fun</span>&gt;
+
+<pre><span style="color:green">val</span> return : 'a -&gt; 'a <span style="color:#0033cc">Lwt</span>.t
+<span style="color:green">val</span> bind : 'a <span style="color:#0033cc">Lwt</span>.t -&gt; ('a -&gt; 'b <span style="color:#0033cc">Lwt</span>.t) -&gt; 'b <span style="color:#0033cc">Lwt</span>.t
 </pre>
 
-<pre># <span style="color:green">let</span> m =
-  <span style="color:#0033cc">Lwt</span>.bind (<span style="color:#0033cc">Lwt_io</span>.read_char <span style="color:#0033cc">Lwt_io</span>.stdin) (<span style="color:green">fun</span> s -&gt;
-    <span style="color:#0033cc">Lwt</span>.return (int_of_char s));;
+<pre># <span style="color:#0033cc">Lwt_io</span>.read_char;;
+- : <span style="color:#0033cc">Lwt_io</span>.input_channel -&gt; char <span style="color:#0033cc">Lwt</span>.t = &lt;<span style="color:green">fun</span>&gt;
+# <span style="color:green">let</span> m =
+  <span style="color:#0033cc">Lwt</span>.bind (<span style="color:#0033cc">Lwt_io</span>.read_char <span style="color:#0033cc">Lwt_io</span>.stdin) (<span style="color:green">fun</span> c -&gt;
+    <span style="color:#0033cc">Lwt</span>.return (int_of_char c));;
 <span style="color:green">val</span> m : int <span style="color:#0033cc">Lwt</span>.t = &lt;abstr&gt;
 </pre>
+
+
+<pre><span style="color:green">let</span> m =
+  <span style="color:#0033cc">Lwt_io</span>.read_char <span style="color:#0033cc">Lwt_io</span>.stdin <span style="font-weight: bold; color: red">&gt;&gt;=</span> <span style="color:green">fun</span> c -&gt;
+  return (int_of_char c)
+</pre>
+
 <div>
 <hr/>
 <quote>The name is taken from the mathematical monad construct in category
@@ -109,7 +118,7 @@ theory, though the two concepts are not identical.</quote>
 - : 'a <span style="color:#0033cc">Lwt</span>.t list -&gt; 'a <span style="color:#0033cc">Lwt</span>.t = &lt;<span style="color:green">fun</span>&gt;
 </pre>
 
-  <p>Behave as the first thread in l to terminate.</p>
+  <p>Behave as the first thread in the list to terminate.</p>
 
 </div>
 
@@ -131,7 +140,6 @@ theory, though the two concepts are not identical.</quote>
 
 
 <article >
-  
   <h3>Project Overview</h3>
   <p>
     <a href="../img/project_overview.png">
@@ -145,8 +153,444 @@ theory, though the two concepts are not identical.</quote>
   <iframe src="../sequme/Sequme_flow_monad.IO_CONFIGURATION.html"></iframe>
 </article>
 
+
+<article>
+  <h3>And Also Errors And Exceptions</h3>
+  <ul>
+    <li>Don't like exceptions.</li>
+    <li class="imply">Need a <strong>Result Monad</strong>
+      (a.k.a. Error Monad).</li>
+    <li>Already using a monad.</li>
+    <li class="imply"><strong>Monad Transformer</strong>.</li>
+  </ul>
+
+
+<pre><span style="color:green">module</span> <span style="color:green">type</span> <span style="color:#0033cc">Result_IO_monad</span> = <span style="color:#990099">sig</span>
+  <span style="color:green">type</span> ('ok, 'err) monad 
+  <span style="color:green">val</span> bind : ('ok, 'err) monad -&gt;
+             ('ok -&gt; ('ok_next, 'err) monad) -&gt;
+             ('ok_next, 'err) monad
+  <span style="color:green">val</span> return : 'ok -&gt; ('ok, 'any) monad
+  <span style="color:green">val</span> error : 'err -&gt; ('any, 'err) monad
+<span style="color:#990099">end</span>
+</pre>
+</article>
+
 <article>
   <h3>The Flow Monad</h3>
   <iframe src="../sequme/Sequme_flow_monad.FLOW_MONAD.html"></iframe>
+</article>
+
+
+<article>
+  <h3>The Flow Monad — Example</h3>
+<pre class="small build"><div># <span style="color:green">let</span> computation (dbh: <span style="color:#0033cc">Layout</span>.db_handle) =
+    pg_raw_query ~dbh ~query:<span style="color:#aa4444">"select print_name from person"</span>
+    &gt;&gt;= <span style="color:green">fun</span> list_of_options -&gt;
+    <span style="color:green">let</span> content =
+      <span style="color:#0033cc">List</span>.flatten list_of_options |! <span style="color:#0033cc">List</span>.filter_opt |! <span style="color:#0033cc">String</span>.concat ~sep:<span style="color:#aa4444">"\\n"</span> <span style="color:green">in</span>
+    write_file ~file:<span style="color:#aa4444">"/tmp/somefile"</span> ~content
+    &gt;&gt;= <span style="color:green">fun</span> () -&gt;
+    system_command <span style="color:#aa4444">"cat /tmp/somefile | grep Seb"</span>;;
+      </div><div>
+<span style="color:green">val</span> computation :
+  <span style="color:#0033cc">HS</span>.<span style="color:#0033cc">Layout</span>.db_handle -&gt;
+  (unit,
+   [&gt; <span style="color:#0033cc">`</span>io_exn <span style="color:green">of</span> exn
+    <span style="color:#77aaaa">|</span> <span style="color:#0033cc">`</span>system_command_error <span style="color:green">of</span> string * exn
+    <span style="color:#77aaaa">|</span> <span style="color:#0033cc">`</span>write_file_error <span style="color:green">of</span> string * string * exn ])
+  <span style="color:#0033cc">HS</span>.<span style="color:#0033cc">Flow</span>.monad = &lt;<span style="color:green">fun</span>&gt;
+  </div>
+
+<span># computation database_handle;;</span>
+<span><span style="color:#0033cc">Sebastien</span> <span style="color:#0033cc">Mondet</span>
+- : (unit,
+     _[&gt; <span style="color:#0033cc">`</span>io_exn <span style="color:green">of</span> exn
+       <span style="color:#77aaaa">|</span> <span style="color:#0033cc">`</span>system_command_error <span style="color:green">of</span> string * exn
+       <span style="color:#77aaaa">|</span> <span style="color:#0033cc">`</span>write_file_error <span style="color:green">of</span> string * string * exn ])
+    <span style="color:#0033cc">HS</span>.<span style="color:#0033cc">Flow</span>.monad
+= <span style="color:#0033cc">Ok</span> ()</span>
+</pre>
+
+</div>
+</article>
+
+
+<article>
+  <h3>The Flow Monad — Example</h3>
+
+<pre class=" build"><span># <span style="color:green">let</span> wrong_compute_and_print_what_happens dbh =
+  bind_on_error (computation dbh)
+    ~f:(<span style="color:green">fun</span> err -&gt;
+      <span style="color:#77aaaa">match</span> err <span style="color:#77aaaa">with</span>
+      <span style="color:#77aaaa">|</span> <span style="color:#0033cc">`</span>io_exn e -&gt;
+        ksprintf debug <span style="color:#aa4444">"There was an I/O error: %s"</span> (<span style="color:#0033cc">Exn</span>.to_string e)
+      <span style="color:#77aaaa">|</span> <span style="color:#0033cc">`</span>system_command_error (cmd, e) -&gt;
+        ksprintf debug <span style="color:#aa4444">"The command %s ended up in an error: %s"</span>
+          cmd (<span style="color:#0033cc">Exn</span>.to_string e));;</span>
+<span><span style="color:#0033cc">Characters</span> 129-138:
+        <span style="color:#77aaaa">|</span> <span style="color:#0033cc">`</span>io_exn e -&gt;
+          ^^^^^^^^^
+<span style="color:#0033cc">Error</span>: <span style="color:#0033cc">This</span> pattern matches values <span style="color:green">of</span> <span style="color:green">type</span>
+         [&lt; <span style="color:#0033cc">`</span>io_exn <span style="color:green">of</span> 'a <span style="color:#77aaaa">|</span> <span style="color:#0033cc">`</span>system_command_error <span style="color:green">of</span> 'b * 'c ]
+       but a pattern was expected which matches values <span style="color:green">of</span> <span style="color:green">type</span>
+         [&gt; <span style="color:#0033cc">`</span>io_exn <span style="color:green">of</span> exn
+          <span style="color:#77aaaa">|</span> <span style="color:#0033cc">`</span>system_command_error <span style="color:green">of</span> string * exn
+          <span style="color:#77aaaa">|</span> <span style="color:#0033cc">`</span>write_file_error <span style="color:green">of</span> string * string * exn ]
+       <span style="color:#0033cc">The</span> first variant <span style="color:green">type</span> does not allow tag(s) <span style="color:#0033cc">`</span>write_file_error
+       </span>
+</pre>
+</article>
+
+<article>
+  <h3>The Flow Monad — Example</h3>
+
+<pre class="build"><span><span style="color:green">let</span> compute_and_print_what_happens dbh =
+  bind_on_error (computation dbh)
+    ~f:(<span style="color:green">fun</span> err -&gt;
+      <span style="color:#77aaaa">match</span> err <span style="color:#77aaaa">with</span>
+      <span style="color:#77aaaa">|</span> <span style="color:#0033cc">`</span>io_exn e -&gt;
+        ksprintf debug <span style="color:#aa4444">"There was an I/O error: %s"</span> (<span style="color:#0033cc">Exn</span>.to_string e)
+      <span style="color:#77aaaa">|</span> <span style="color:#0033cc">`</span>system_command_error (cmd, e) -&gt;
+        ksprintf debug <span style="color:#aa4444">"The command %S ended up in an error: %s"</span>
+          cmd (<span style="color:#0033cc">Exn</span>.to_string e)
+      <span style="color:#77aaaa">|</span> <span style="color:#0033cc">`</span>write_file_error (file, _, e) -&gt;
+        ksprintf debug <span style="color:#aa4444">"Cannot write to %S: %s"</span> file (<span style="color:#0033cc">Exn</span>.to_string e));;</span>
+<span>
+<span style="color:green">val</span> compute_and_print_what_happens :
+  <span style="color:#0033cc">HS</span>.<span style="color:#0033cc">Layout</span>.db_handle -&gt; (unit, [&gt; <span style="color:#0033cc">`</span>io_exn <span style="color:green">of</span> exn ]) <span style="color:#0033cc">HS</span>.<span style="color:#0033cc">Flow</span>.monad = &lt;<span style="color:green">fun</span>&gt;
+  </span>
+<span># debug;;
+- : string -&gt; (unit, [&gt; <span style="color:#0033cc">`</span>io_exn <span style="color:green">of</span> exn ]) <span style="color:#0033cc">HS</span>.<span style="color:#0033cc">Flow</span>.monad = &lt;<span style="color:green">fun</span>&gt;
+</span>
+</pre>
+</article>
+
+
+
+
+<article >
+  <h3>Project Overview</h3>
+  <p>
+    <a href="../img/project_overview.png">
+    <img src="../img/project_overview.png"  class="centered" width="100%"></img>
+    </a>
+  </p>
+</article>
+
+<article>
+  <h3>Hitscoregen — Why?</h3>
+
+  <p>Need a Persistence layer:</p>
+  <ul>
+    <li>Database → meta-data.</li>
+    <li>File-system → big data.</li>
+  </ul>
+  <p>Need a more high-level representation:</p>
+  <ul>
+    <li>Virtual file-system: <em>just</em> a cache.</li>
+    <li>Ensure coherency: DB tables Vs OCaml code Vs File-system.</li>
+    <li>SQL is not portable, weakly typed, verbose.</li>
+    <li>Quick and safe migrations.</li>
+  </ul>
+</article>
+
+<article>
+  <h3>Hitscoregen — DSL Approach</h3>
+  <p>Define a Domain Specific Language:</p>
+  <ul>
+    <li>“Our” concepts: functions, records, …</li>
+    <li>Better typing: enumerations, non-null by default, file-system elements …</li>
+    <li>Manageable size.</li>
+  </ul>
+  <p>Then, from one single descriptive file:</p>
+  <ul>
+    <li>Generate <code>init_db.psql</code>.</li>
+    <li>Generate well typed OCaml code for accessing the data.</li>
+    <li>Generate pretty graphs.</li>
+    <li>Handle migrations peacefully.</li>
+    <li>Provide an <em>introspection-like</em> API.</li>
+  </ul>
+</article>
+
+<article>
+  <h3>Hitscoregen — Example — Source</h3>
+
+<pre>(<span style="color:green">record</span> shared_record
+        (field string))
+(<span style="color:green">enumeration</span> one_enumeration this that these)
+(<span style="color:green">volume</span> one_bowery_volume my_volume_dir)
+(<span style="color:green">record</span> one_record
+        (field int)
+        (other_field shared_record option)
+        (which one_enumeration)
+        (files one_bowery_volume))
+
+(<span style="color:green">record</span> result_record
+        (foo real)
+        (bar timestamp option))
+
+(<span style="color:green">function</span> result_record do_something
+          (arg1 int option)
+          (record one_record))
+</pre>
+</article>
+
+
+<article>
+  <h3>Hitscoregen — Example — Layout Digraph</h3>
+  <p>
+    <a href="../img/example_layout.png">
+    <img src="../img/example_layout.png"  class="centered" width="100%"></img>
+    </a>
+  </p>
+</article>
+
+<article>
+  <h3>Hitscoregen — Example — Database Digraph</h3>
+  <p>
+    <a href="../img/example_db.png">
+    <img src="../img/example_db.png"  class="centered" height="90%"></img>
+    </a>
+  </p>
+</article>
+
+<article>
+  <h3>Hitscoregen — Example — Database Init</h3>
+  <pre style="font-size:60%;line-height:120%">
+CREATE TABLE g_volume                    CREATE TABLE result_record
+  (g_id serial PRIMARY KEY NOT NULL,       (g_id serial PRIMARY KEY NOT NULL,
+   g_kind text NOT NULL,                    g_created text,
+   g_sexp text NOT NULL);                   g_last_modified text,
+CREATE TABLE log                            foo real NOT NULL,
+  (g_id serial PRIMARY KEY NOT NULL,        bar text);
+   g_created text,                       CREATE TABLE do_something
+   g_last_modified text,                   (g_id serial PRIMARY KEY NOT NULL,
+   log text NOT NULL);                      g_result integer,
+CREATE TABLE shared_record                  g_recomputable bool NOT NULL,
+  (g_id serial PRIMARY KEY NOT NULL,        g_recompute_penalty real,
+   g_created text,                          g_inserted text,
+   g_last_modified text,                    g_started text,
+   field text NOT NULL);                    g_completed text,
+CREATE TABLE one_record                     g_status text NOT NULL,
+  (g_id serial PRIMARY KEY NOT NULL,        arg1 integer,
+   g_created text,                          record integer NOT NULL);
+   g_last_modified text,
+   field integer NOT NULL,
+   other_field integer,
+   which text NOT NULL,
+   files integer NOT NULL);
+</pre>
+</article>
+
+
+<article>
+  <h3>Hitscoregen — Example — Some OCaml Code</h3>
+
+<pre><span style="color:green">module</span> <span style="color:#0033cc">Record_shared_record</span> = <span style="color:#990099">struct</span>
+
+<span style="color:#990000">(** A handle to a given record-value in the data-base (access to the</span>
+<span style="color:#990000">[id] field is there for hackability/emergency purposes). *)</span>
+<span style="color:green">type</span> pointer = { id: int32 } <span style="color:#77aaaa">with</span> sexp
+
+<span style="color:#990000">(** Unsafely create a pointer. *)</span>
+<span style="color:green">let</span> unsafe_cast id = { id }
+
+<span style="color:#990000">(** The type [t] represents the contents of a value (a copy of</span>
+<span style="color:#990000">  the database record in the memory of the process). *)</span>
+<span style="color:green">type</span> t = {g_id: int32;g_created: <span style="color:#0033cc">Timestamp</span>.t option;
+   g_last_modified: <span style="color:#0033cc">Timestamp</span>.t option;field: string;} <span style="color:#77aaaa">with</span> sexp
+</pre>
+
+
+</article>
+
+<article>
+  <h3>Hitscoregen — Example — Some OCaml Code</h3>
+<pre class="small"><span style="color:green">exception</span> <span style="color:#0033cc">Local_exn_insert_did_not_return_one_id</span> <span style="color:green">of</span> string * int32 list
+
+<span style="color:#990000">(** Create a new value of type [shared_record] in the database, and</span>
+<span style="color:#990000">return a handle to it. *)</span>
+<span style="color:green">let</span> add_value
+   ~(field:string)
+    ~(dbh: db_handle) :
+   (pointer, [&gt; <span style="color:#0033cc">`</span>layout_inconsistency <span style="color:green">of</span>
+                   [&gt; <span style="color:#0033cc">`</span><span style="color:#0033cc">Record</span> <span style="color:green">of</span> string ] *
+                   [&gt; <span style="color:#0033cc">`</span>insert_did_not_return_one_id <span style="color:green">of</span> (string * int32 list)]
+              <span style="color:#77aaaa">|</span> <span style="color:#0033cc">`</span>pg_exn <span style="color:green">of</span> exn ]) <span style="color:#0033cc">Flow</span>.monad
+  =
+<span style="color:green">let</span> _exn_version () =
+  <span style="color:green">let</span> now = <span style="color:#0033cc">Timestamp</span>.(to_string (now ())) <span style="color:green">in</span>
+  <span style="color:green">let</span> i32_list_monad = <span style="color:#0033cc">PGSQL</span> (dbh)
+    <span style="color:#aa4444">"INSERT INTO shared_record (g_created, g_last_modified, field)</span>
+<span style="color:#aa4444">     VALUES ($now, $now, $field)</span>
+<span style="color:#aa4444">     RETURNING g_id "</span> <span style="color:green">in</span>
+  pg_bind i32_list_monad 
+    (<span style="color:green">function</span>
+       <span style="color:#77aaaa">|</span> [ id ] -&gt; <span style="color:#0033cc">PGOCaml</span>.return { id }
+       <span style="color:#77aaaa">|</span> l -&gt; (<span style="color:#0033cc">Flow</span>.<span style="color:#0033cc">IO</span>.fail (<span style="color:#0033cc">Local_exn_insert_did_not_return_one_id</span>
+                (<span style="color:#aa4444">"shared_record"</span>,  l))))
+
+<span style="color:green">in</span>
+<span style="color:#0033cc">Flow</span>.bind_on_error (catch_pg_exn _exn_version ())
+  (<span style="color:green">fun</span> e -&gt; <span style="color:#0033cc">Flow</span>.error (<span style="color:#77aaaa">match</span> e <span style="color:#77aaaa">with</span>
+            <span style="color:#77aaaa">|</span> <span style="color:#0033cc">`</span>pg_exn (<span style="color:#0033cc">Local_exn_insert_did_not_return_one_id</span> (x0, x1)) -&gt;
+                 <span style="color:#0033cc">`</span>layout_inconsistency (<span style="color:#0033cc">`</span><span style="color:#0033cc">Record</span> <span style="color:#aa4444">"shared_record"</span>,
+                              <span style="color:#0033cc">`</span>insert_did_not_return_one_id (x0, x1))
+            <span style="color:#77aaaa">|</span> <span style="color:#0033cc">`</span>pg_exn e -&gt; <span style="color:#0033cc">`</span>pg_exn e))
+</pre>
+
+</article>
+
+
+
+<article>
+  <h3>Hitscoregen — Example — Some OCaml Code</h3>
+  <pre class="very_small"><span style="color:green">exception</span> <span style="color:#0033cc">Local_exn_select_did_not_return_one_tuple</span> <span style="color:green">of</span> string * int
+
+<span style="color:green">let</span> get_value_exn t ~(dbh: db_handle) =
+  <span style="color:green">let</span> tuple_m = 
+    <span style="color:green">let</span> id = t.id <span style="color:green">in</span>
+    <span style="color:green">let</span> um = <span style="color:#0033cc">PGSQL</span> (dbh)
+      <span style="color:#aa4444">"SELECT * FROM shared_record WHERE g_id = $id"</span> <span style="color:green">in</span>
+    pg_bind um (<span style="color:green">function</span> [one] -&gt; pg_return one
+    <span style="color:#77aaaa">|</span> l -&gt; (<span style="color:#0033cc">Flow</span>.<span style="color:#0033cc">IO</span>.fail (<span style="color:#0033cc">Local_exn_select_did_not_return_one_tuple</span>
+                            (<span style="color:#aa4444">"shared_record"</span>, <span style="color:#0033cc">List</span>.length l)))
+    )
+  <span style="color:green">in</span>
+  pg_bind tuple_m (<span style="color:green">fun</span> (g_id, g_created, g_last_modified,field) -&gt; 
+    pg_return {
+      g_id = g_id;
+      g_created = (option_map g_created <span style="color:#0033cc">Timestamp</span>.of_string);
+      g_last_modified =
+        (option_map g_last_modified <span style="color:#0033cc">Timestamp</span>.of_string);
+      field = field;
+    })
+
+<span style="color:#990000">(** Get the contents of the record at [pointer]. *)</span>
+<span style="color:green">let</span> get (pointer: pointer) ~(dbh: db_handle):
+    (t, [&gt; <span style="color:#0033cc">`</span>layout_inconsistency <span style="color:green">of</span>
+        [&gt; <span style="color:#0033cc">`</span><span style="color:#0033cc">Record</span> <span style="color:green">of</span> string ] *
+          [&gt; <span style="color:#0033cc">`</span>select_did_not_return_one_tuple <span style="color:green">of</span> (string * int)]
+        <span style="color:#77aaaa">|</span> <span style="color:#0033cc">`</span>pg_exn <span style="color:green">of</span> exn ]) <span style="color:#0033cc">Flow</span>.monad
+    =
+  <span style="color:green">let</span> _exn_version () =
+    get_value_exn ~dbh pointer
+  <span style="color:green">in</span>
+  <span style="color:#0033cc">Flow</span>.bind_on_error (catch_pg_exn _exn_version ())
+    (<span style="color:green">fun</span> e -&gt;
+      <span style="color:#0033cc">Flow</span>.error (<span style="color:#77aaaa">match</span> e <span style="color:#77aaaa">with</span>
+      <span style="color:#77aaaa">|</span> <span style="color:#0033cc">`</span>pg_exn (<span style="color:#0033cc">Local_exn_select_did_not_return_one_tuple</span> (x0, x1)) -&gt;
+        <span style="color:#0033cc">`</span>layout_inconsistency (<span style="color:#0033cc">`</span><span style="color:#0033cc">Record</span> <span style="color:#aa4444">"shared_record"</span>,
+                               <span style="color:#0033cc">`</span>select_did_not_return_one_tuple (x0, x1))
+      <span style="color:#77aaaa">|</span> <span style="color:#0033cc">`</span>pg_exn e -&gt; <span style="color:#0033cc">`</span>pg_exn e))
+</pre>
+</article>
+
+
+
+<article>
+  <h3>Hitscoregen — Example — Backups</h3>
+
+<pre class="small"><span style="color:#990000">(** An OCaml record containing the whole data-base. *)</span>
+<span style="color:green">type</span> dump = {
+  version: string;
+  file_system: <span style="color:#0033cc">File_system</span>.volume list;
+  record_log: <span style="color:#0033cc">Record_log</span>.t list;
+  record_shared_record: <span style="color:#0033cc">Record_shared_record</span>.t list;
+  record_one_record: <span style="color:#0033cc">Record_one_record</span>.t list;
+  record_result_record: <span style="color:#0033cc">Record_result_record</span>.t list;
+  function_do_something: [ <span style="color:#0033cc">`</span>can_nothing ] <span style="color:#0033cc">Function_do_something</span>.t list;
+} <span style="color:#77aaaa">with</span> sexp
+</pre>
+
+
+<pre class="small"><span style="color:#990000">(** Sexplib functions may raise exceptions. *)</span>
+<span style="color:green">val</span> dump_of_sexp: <span style="color:#0033cc">Sexplib</span>.<span style="color:#0033cc">Sexp</span>.t -&gt; dump
+<span style="color:#990000">(** Sexplib functions may raise exceptions. *)</span>
+<span style="color:green">val</span> sexp_of_dump: dump -&gt; <span style="color:#0033cc">Sexplib</span>.<span style="color:#0033cc">Sexp</span>.t
+<span style="color:#990000">(** Retrieve the whole data-base. *)</span>
+<span style="color:green">val</span> get_dump: dbh:db_handle -&gt;
+  (dump, [&gt; <span style="color:#0033cc">`</span>layout_inconsistency <span style="color:green">of</span>
+            [&gt; <span style="color:#0033cc">`</span><span style="color:#0033cc">File_system</span> <span style="color:#77aaaa">|</span> <span style="color:#0033cc">`</span><span style="color:#0033cc">Function</span> <span style="color:green">of</span> string <span style="color:#77aaaa">|</span> <span style="color:#0033cc">`</span><span style="color:#0033cc">Record</span> <span style="color:green">of</span> string ] *
+            [&gt; <span style="color:#0033cc">`</span>select_did_not_return_one_tuple <span style="color:green">of</span> (string * int)]
+         <span style="color:#77aaaa">|</span> <span style="color:#0033cc">`</span>pg_exn <span style="color:green">of</span> exn ]) <span style="color:#0033cc">Flow</span>.monad
+<span style="color:#990000">(** Insert the contents of a [dump] in the data-base ({b Unsafe!}). *)</span>
+<span style="color:green">val</span> insert_dump: dbh:db_handle -&gt; dump -&gt;
+  (unit, [&gt; <span style="color:#0033cc">`</span>wrong_version <span style="color:green">of</span> string * string
+         <span style="color:#77aaaa">|</span> <span style="color:#0033cc">`</span>layout_inconsistency <span style="color:green">of</span>
+             [&gt; <span style="color:#0033cc">`</span><span style="color:#0033cc">File_system</span> <span style="color:#77aaaa">|</span> <span style="color:#0033cc">`</span><span style="color:#0033cc">Function</span> <span style="color:green">of</span> string <span style="color:#77aaaa">|</span> <span style="color:#0033cc">`</span><span style="color:#0033cc">Record</span> <span style="color:green">of</span> string ] *
+               [&gt; <span style="color:#0033cc">`</span>insert_cache_did_not_return_one_id <span style="color:green">of</span> (string * int32 list)
+               <span style="color:#77aaaa">|</span> <span style="color:#0033cc">`</span>insert_tuple_did_not_return_one_id <span style="color:green">of</span> (string * int32 list)
+               <span style="color:#77aaaa">|</span> <span style="color:#0033cc">`</span>insert_value_did_not_return_one_id <span style="color:green">of</span> (string * int32 list)]
+         <span style="color:#77aaaa">|</span> <span style="color:#0033cc">`</span>pg_exn <span style="color:green">of</span> exn ]) <span style="color:#0033cc">Flow</span>.monad
+</pre>
+</article>
+
+<article>
+  <h3>Hitscoregen — Example — Migration</h3>
+
+  <p>The migrator is an S-Expression transformer between two versions.</p>
+
+
+<pre class="small"><span style="color:green">let</span> add_empty name =
+  <span style="color:green">let</span> <span style="color:#cc9900">open</span> <span style="color:#0033cc">Sexplib</span>.<span style="color:#0033cc">Sexp</span> <span style="color:green">in</span>
+  <span style="color:green">function</span>
+  <span style="color:#77aaaa">|</span> <span style="color:#0033cc">Atom</span> a -&gt; <span style="color:#cc9900">assert</span> false
+  <span style="color:#77aaaa">|</span> <span style="color:#0033cc">List</span> l -&gt; <span style="color:#0033cc">List</span> (<span style="color:#0033cc">List</span> [<span style="color:#0033cc">Atom</span> name; <span style="color:#0033cc">List</span> []] :: l)
+      
+<span style="color:green">module</span> <span style="color:#0033cc">V07M</span> = <span style="color:#0033cc">V07</span>.<span style="color:#0033cc">Make</span> (<span style="color:#0033cc">Flow</span>)
+<span style="color:green">module</span> <span style="color:#0033cc">V08M</span> = <span style="color:#0033cc">V08</span>.<span style="color:#0033cc">Make</span> (<span style="color:#0033cc">Flow</span>)
+<span style="color:green">let</span> v07_to_v08 dump_v07 =
+  <span style="color:green">let</span> dump_v08 =
+    <span style="color:green">let</span> <span style="color:#cc9900">open</span> <span style="color:#0033cc">Sexplib</span>.<span style="color:#0033cc">Sexp</span> <span style="color:green">in</span>
+    <span style="color:green">let</span> <span style="color:green">rec</span> parse =
+      <span style="color:green">function</span>
+      <span style="color:#77aaaa">|</span> <span style="color:#0033cc">Atom</span> a -&gt; <span style="color:#0033cc">Atom</span> a
+      <span style="color:#77aaaa">|</span> <span style="color:#0033cc">List</span> [<span style="color:#0033cc">Atom</span> <span style="color:#aa4444">"version"</span>; <span style="color:#0033cc">Atom</span> old_version]
+          <span style="color:#77aaaa">when</span> old_version = <span style="color:#0033cc">V07</span>.<span style="color:#0033cc">Info</span>.version -&gt;
+        <span style="color:#0033cc">List</span> [<span style="color:#0033cc">Atom</span> <span style="color:#aa4444">"version"</span>; <span style="color:#0033cc">Atom</span> <span style="color:#0033cc">V08</span>.<span style="color:#0033cc">Info</span>.version ]
+
+      <span style="color:#77aaaa">|</span> <span style="color:#0033cc">List</span> [<span style="color:#0033cc">Atom</span> <span style="color:#aa4444">"record_person"</span>; <span style="color:#0033cc">List</span> persons] -&gt;
+        <span style="color:#0033cc">List</span> [<span style="color:#0033cc">Atom</span> <span style="color:#aa4444">"record_person"</span>;
+              <span style="color:#0033cc">List</span> (<span style="color:#0033cc">List</span>.map persons (add_empty <span style="color:#aa4444">"password_hash"</span>))]
+          
+      <span style="color:#77aaaa">|</span> <span style="color:#0033cc">List</span> [<span style="color:#0033cc">Atom</span> <span style="color:#aa4444">"function_bcl_to_fastq"</span>; <span style="color:#0033cc">List</span> persons] -&gt;
+        <span style="color:#0033cc">List</span> [<span style="color:#0033cc">Atom</span> <span style="color:#aa4444">"function_bcl_to_fastq"</span>;
+              <span style="color:#0033cc">List</span> (<span style="color:#0033cc">List</span>.map persons (add_empty <span style="color:#aa4444">"bases_mask"</span>))]
+          
+      <span style="color:#77aaaa">|</span> <span style="color:#0033cc">List</span> l -&gt;
+        <span style="color:#0033cc">List</span> (<span style="color:#0033cc">List</span>.map ~f:parse l) <span style="color:green">in</span>
+    parse dump_v07
+  <span style="color:green">in</span>
+</pre>
+
+</article>
+
+
+<article>
+  <h3>Hitscoregen — Example — Introspection API</h3>
+  <p>
+    <a href="../img/layout_navigaditor_screenshot.png">
+    <img src="../img/layout_navigaditor_screenshot.png"  class="centered" height="90%"></img>
+    </a>
+  </p>
+</article>
+
+
+<article>
+  <h3>Hitscoregen — Example — Documentation of The API</h3>
+  <iframe src="../hitscore//lib/Hitscore_layout_interface.LAYOUT.html"></iframe>
+</article>
+
+
+
+<article >
+  <h3>Thanks — Questions?</h3>
+  <p>
+    <a href="../img/project_overview.png">
+    <img src="../img/project_overview.png"  class="centered" width="100%"></img>
+    </a>
+  </p>
 </article>
 

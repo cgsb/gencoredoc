@@ -283,10 +283,11 @@ a:hover {
 }
 
 p {
-  margin: 0;
+  margin-top: 10px;
+  margin-bottom: 8px;
   padding: 0;
 
-  margin-top: 20px;
+  /* margin-top: 20px; */
 }
 p:first-child {
   margin-top: 0;
@@ -332,6 +333,7 @@ h3 {
 
   padding: 5px;
   margin: 0;
+  margin-bottom: 10px;
   padding-right: 40px;
 
   font-weight: bold;
@@ -368,7 +370,7 @@ ul {
   margin: 0;
   padding: 0;
 
-  margin-top: 40px;
+  margin-top: 0px;
 
   margin-left: .75em;
 }
@@ -381,18 +383,23 @@ ul ul {
 li {
   padding: 0;
   margin: 0;
-
+  margin-left: 0.3em;
   margin-bottom: .5em;
 }
 li::before {
-  content: '·';
-
-  width: .75em;
-  margin-left: -.75em;
-
+  content: '♦ ';
+  color: #0A4B09;
+  /* width: 1em; */
+  margin-left: -1em;
   position: absolute;
 }
-
+li.imply::before {
+  content: '⇒ ';
+  color: #0A4B09;
+  /* width: 1em; */
+  margin-left: -1em;
+  position: absolute;
+}
 pre {
   font-family: 'Droid Sans Mono', 'Courier New', monospace;
 
@@ -402,8 +409,8 @@ pre {
   
   letter-spacing: -1px;
 
-  margin-top: 40px;
-  margin-bottom: 40px;
+  margin-top: 20px;
+  margin-bottom: 20px;
 
   color: black;
   background: rgb(240, 240, 240);
@@ -412,7 +419,8 @@ pre {
   
   overflow: hidden;
 }
-
+pre.small {font-size: 15px; line-height: 18px;}
+pre.very_small {font-size: 12px; line-height: 14px;}
 code {
   font-size: 95%;
   font-family: 'Droid Sans Mono', 'Courier New', monospace;
