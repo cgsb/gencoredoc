@@ -7,14 +7,16 @@ Export the google-doc to CSV.
 
 Test the import (read the output, check everything):
 {v
- $ hitscore <profile> pss file.csv
+ $ hitscore <profile> pss <phix_spec> <file_csv>
 v}
 
 Do the real one (check the run-plan for PhiX spike-in):
 {v
- $ hitscore production -wet-run A:1 B:2 pss.csv
+ $ hitscore production -wet-run A:1,B:2 pss.csv
 v}
-{e A:1 B:2} mean that the pool A has 1% PhiX and the pool B 2%.
+{e A:1,B:2} means that the pool A has 1% PhiX and the pool B 2%.
+If no pool has PhiX, the user has to specify 'No_PhiX' (case
+insensitive).
 
 Once all the pools are in, check their IDs:
 {v
