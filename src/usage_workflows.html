@@ -108,17 +108,23 @@ where <code>&lt;bn&gt;</code> is an Hiseq-raw directory <code>g_id</code>.
 
 <span id="3_WebsiteDeployment"><h3>Website Deployment</h3></span>
 
-<p> Go to WSO1. </p>
+<p>Go to WSO1.</p>
 
-<p> Pull, compile, and install hitscore and hitscoreweb. </p>
+<p>Pull, compile, and install hitscore and hitscoreweb (and any other
+dependency …).</p>
 
-<p> RPMs go to <code>in /tmp/hitscorerpmbuild/RPMS/x86_64</code>. </p>
-
-<pre> $ hitscoreweb production rpm -rpm-release 3 -ssl cert.pem privkey-unsec.pem -ssl-dir /etc/gencoressl</pre>
+<pre>
+hitscoreweb production rpm -rpm-release 8 \
+  -ssl <i>certificate</i>.crt <i>unencrypted-key</i>.key \
+  -ssl-dir <i>ssl-directory</i> \
+  -pam <i>pam-service</i>
+</pre>
 <p>
   The release number should be increased every time for a given
   hitscore version.
 </p>
+
+<p> RPMs go to <code>in /tmp/hitscorerpmbuild/RPMS/x86_64</code>. </p>
 
 <p> As root: </p>
 <pre> # service hitscoreweb stop
