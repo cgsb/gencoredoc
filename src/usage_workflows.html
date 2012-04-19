@@ -9,7 +9,7 @@
 
 <p>Do the real one (check the run-plan for PhiX spike-in):</p>
 <pre> $ hitscore production -wet-run A:1,B:2 pss.csv</pre>
-<p><em>A:1,B:2</em> means that the pool A has 1% PhiX and the pool B 2%.
+<p><code>A:1,B:2</code> means that the pool A has 1% PhiX and the pool B 2%.
 If no pool has PhiX, the user has to specify 'No_PhiX' (case
 insensitive).</p>
 
@@ -47,8 +47,9 @@ usage: hitscore &lt;profile&gt; register-hiseq-raw [-host &lt;host-addr&gt;] &lt
 <p>
   Choose and Hiseq-raw directory (e.g. from the output of register-hiseq-raw, the
 <a href="https://gencore.bio.nyu.edu/layout?type=record_hiseq_raw&action=view">/layout</a>
-service, or <em>select * in hiseq_raw</em>, …).
+service, or <code>select * in hiseq_raw</code>, …).
 </p>
+
 
 <pre> $ hitscore production bcl-to-fastq start  &lt;nb&gt;</pre>
 
@@ -56,11 +57,35 @@ service, or <em>select * in hiseq_raw</em>, …).
 <pre> $ hitscore production bcl-to-fastq start -help</pre>
 for options (sample-sheet kind, tiles, wall-hours, etc.).
 
+<h3>Generating FASTX Quality Statistics</h3>
+
+<p> The command <code>fastx-quality-stats</code>
+(a.k.a. <code>fxqs</code>), has the same kind of interface
+as <code>b2f</code>.
+</p>
+<pre>
+  $ hitscore dev help fxqs
+Usage: hitscore &lt;profile&gt; fxqs &lt;command&gt; &lt;args&gt;
+Where the commands are:
+  * start: start the function (try "-help").
+  * register-success &lt;id&gt;.
+  * register-failure &lt;id&gt; [&lt;reason-log&gt;].
+  * status &lt;id&gt; : Get the current status of an evaluation.
+  * fix-status &lt;id&gt; : Get the status and fix it if possible
+  * kill &lt;id&gt;.
+</pre>
+
+<p> Right now, its input is the ID of a given <i>bcl-to-fastq</i> run
+For example, after the <i>bcl-to-fastq</i> 42 has finished successfully: </p>
+<pre>
+hitscore production fxqs -from-b2f 42
+</pre>
+
 <span id="3_Delivery"><h3>Delivery</h3></span>
 
 <p>
-  Use the <i>custom-query</i> “<em>deliveries</em>” to know what is available to
-deliver, then the command <em>deliver</em> to do the actual links with ACLs.
+  Use the <i>custom-query</i> “<code>deliveries</code>” to know what is available to
+deliver, then the command <code>deliver</code> to do the actual links with ACLs.
 </p>
 
 <p> Example delivering C0HYHACXX: </p>
@@ -79,7 +104,7 @@ Found 1 bcl-to-fastqs:
 
 <p> for now the deletion is manual, but one can register a successful one:</p>
 <pre> $ hitscore production delete-intensities register &lt;nb&gt;</pre>
-where <em>&lt;bn&gt;</em> is an Hiseq-raw directory <em>g_id</em>.
+where <code>&lt;bn&gt;</code> is an Hiseq-raw directory <code>g_id</code>.
 
 <span id="3_WebsiteDeployment"><h3>Website Deployment</h3></span>
 
@@ -87,7 +112,7 @@ where <em>&lt;bn&gt;</em> is an Hiseq-raw directory <em>g_id</em>.
 
 <p> Pull, compile, and install hitscore and hitscoreweb. </p>
 
-<p> RPMs go to <em>in /tmp/hitscorerpmbuild/RPMS/x86_64</em>. </p>
+<p> RPMs go to <code>in /tmp/hitscorerpmbuild/RPMS/x86_64</code>. </p>
 
 <pre> $ hitscoreweb production rpm -rpm-release 3 -ssl cert.pem privkey-unsec.pem -ssl-dir /etc/gencoressl</pre>
 <p>
