@@ -1,0 +1,106 @@
+<span id="2_GencoreUsageWorkflows"><h2>Gencore Usage Workflows</h2></span>
+
+<span id="3_ImportingSubmissionSheets"><h3>Importing Submission Sheets</h3></span>
+
+<p>Export the google-doc to CSV.</p>
+
+<p>Test the import (read the output, check everything):</p>
+<pre> $ hitscore &lt;profile&gt; pss &lt;phix_spec&gt; &lt;file_csv&gt;</pre>
+
+<p>Do the real one (check the run-plan for PhiX spike-in):</p>
+<pre> $ hitscore production -wet-run A:1,B:2 pss.csv</pre>
+<p><em>A:1,B:2</em> means that the pool A has 1% PhiX and the pool B 2%.
+If no pool has PhiX, the user has to specify 'No_PhiX' (case
+insensitive).</p>
+
+<p>Once all the pools are in, check their IDs:</p>
+<pre> $ hitscore production Q orphan-lanes</pre>
+
+<p>
+  Register the new flowcell:
+</p>
+
+<pre> $ hitscore production help register-flowcell
+Usage: hitscore &lt;profile&gt; register-flowcell &lt;flowcell-name&gt; &lt;L1&gt; &lt;L2&gt; .. &lt;L8&gt;
+where Lx is 'PhiX', 'Empty', or an orphan lane's id.
+
+ $ hitscore production register-flowcell SERIALCXX PhiX 42 43 Empty 56 57 58 59</pre>
+
+<p>
+  Once we have two flowcells:
+</p>
+<pre> $ hitscore production help register-hiseq-run
+Usage: hitscore &lt;profile&gt; register-hiseq-run &lt;date&gt; &lt;fcidA&gt; &lt;fcidB&gt; [&lt;note&gt;]
+  where fcid is a database id, a proper FCID, or '_'</pre>
+
+<span id="3_HiseqrawDirectories"><h3>Hiseq-raw Directories</h3></span>
+
+<p> As simple as:</p>
+<pre> $ hitscore production help register-hiseq-raw
+usage: hitscore &lt;profile&gt; register-hiseq-raw [-host &lt;host-addr&gt;] &lt;absolute-path&gt;
+   (default host being bowery.es.its.nyu.edu)
+
+ $ hitscore production register-hiseq-raw /absolute/path/to/111004_SN911_0079_BD053MACXX/</pre>
+
+<span id="3_Demultiplexing"><h3>Demultiplexing</h3></span>
+
+<p>
+  Choose and Hiseq-raw directory (e.g. from the output of register-hiseq-raw, the
+<a href="https://gencore.bio.nyu.edu/layout?type=record_hiseq_raw&action=view">/layout</a>
+service, or <em>select * in hiseq_raw</em>, …).
+</p>
+
+<pre> $ hitscore production bcl-to-fastq start  &lt;nb&gt;</pre>
+
+<p> See </p>
+<pre> $ hitscore production bcl-to-fastq start -help</pre>
+for options (sample-sheet kind, tiles, wall-hours, etc.).
+
+<span id="3_Delivery"><h3>Delivery</h3></span>
+
+<p>
+  Use the <i>custom-query</i> “<em>deliveries</em>” to know what is available to
+deliver, then the command <em>deliver</em> to do the actual links with ACLs.
+</p>
+
+<p> Example delivering C0HYHACXX: </p>
+<pre> $ hitscore production Q deliveries  C0HYHACXX
+Found 4 invoices:
+  10 (to Rockman)
+  11 (to Gunsalus)
+  12 (to Carlton)
+  13 (to Purugganan)
+Found 1 bcl-to-fastqs:
+  34 (tiles: N/A, result: 111/B2F_C0HYHACXX_2012-03-02_11-11-37.744094_S10_H15_M1_1.8.2_sm4431)</pre>
+<p> And then for each one needed:</p>
+<pre>$ hitscore production deliver 34 10 /data/cgsb/gencore/out 2012-02-06</pre>
+
+<span id="3_DeletingIntensities"><h3>Deleting Intensities</h3></span>
+
+<p> for now the deletion is manual, but one can register a successful one:</p>
+<pre> $ hitscore production delete-intensities register &lt;nb&gt;</pre>
+where <em>&lt;bn&gt;</em> is an Hiseq-raw directory <em>g_id</em>.
+
+<span id="3_WebsiteDeployment"><h3>Website Deployment</h3></span>
+
+<p> Go to WSO1. </p>
+
+<p> Pull, compile, and install hitscore and hitscoreweb. </p>
+
+<p> RPMs go to <em>in /tmp/hitscorerpmbuild/RPMS/x86_64</em>. </p>
+
+<pre> $ hitscoreweb production rpm -rpm-release 3 -ssl cert.pem privkey-unsec.pem -ssl-dir /etc/gencoressl</pre>
+<p>
+  The release number should be increased every time for a given
+  hitscore version.
+</p>
+
+<p> As root: </p>
+<pre> # service hitscoreweb stop
+ # rpm -e hitscoreweb
+ # rpm -i /tmp/hitscorerpmbuild/RPMS/x86_64/hitscoreweb-0.6-3.x86_64.rpm 
+ # service hitscoreweb start</pre>
+
+<p> One may use something like this after stopping the service: </p>
+
+<pre> # while true; do echo "Gencore stopped for Maintenance, come back in a few minutes" | nc -l 80 ; done</pre><br>
