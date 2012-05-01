@@ -1,0 +1,322 @@
+
+<h2>Install OCaml software and Libraries</h2>
+
+<h3>Foreword</h3>
+
+<p>
+  Recommended overall setup:
+</p>
+<ul>
+  <li>Everything should go to a directory like <code>~/usr/godi312</code></li>
+  <li>A symbolic link is then created in <code>~/usr</code>:
+    <pre>
+ln -s godi312 godi000
+    </pre>
+    this symbolic link can then be changed to have more than one OCaml
+    dependency tree.
+  </li>
+  <li>Paths are set up with <code>godi000</code>
+  <pre>
+export OCAMLPREFIX=$HOME/usr/godi000 
+export PATH=$PATH:$OCAMLPREFIX/bin/:$OCAMLPREFIX/sbin/
+export MANPATH=$MANPATH:$OCAMLPREFIX/man/
+  </pre>
+  </li>
+  <li>And every program or library which depends on that version of the
+OCaml installation should go there. E.g.:
+  <pre>
+ocaml setup.ml -configure --prefix $OCAMLPREFIX
+  </pre>
+  </li>
+</ul>
+
+<h3>For Biocaml/Sequme/Hitscore</h3>
+
+<h4>On Ubuntu / CentOS 6</h4>
+
+<h5>Godi base</h5>
+<p>
+  First
+<a href="http://godi.camlcity.org/godi/get_godi.html">get GODI</a>
+and do the usual bootstrap to, say, <code>~/usr/godi312</code>.
+Then:
+</p>
+<pre>
+godi_perform -build godi-sqlite3 \
+             -build godi-pgocaml \
+             -build godi-getopt \
+             -build godi-type_conv \
+             -build apps-ocamlify \
+             -build godi-ounit \
+             -build godi-ocaml-fileutils \
+             -build godi-res \
+             -build apps-ledit
+</pre>
+
+<h5>OASIS 0.3rcX</h5>
+<p> Let's build latest OASIS: </p>
+<pre>
+wget http://forge.ocamlcore.org/frs/download.php/833/ocaml-data-notation-0.0.8.tar.gz
+tar xvfz ocaml-data-notation-0.0.8.tar.gz
+cd ocaml-data-notation-0.0.8
+</pre>
+<p> Before <i>configure/make/make-install</i>, fix a bug: </p>
+<pre>
+sed -i ' s/type-conv/type_conv/g' setup.ml _tags  src/META
+</pre>
+
+<p> The next ones should build without any problem: </p>
+<pre>
+wget http://forge.ocamlcore.org/frs/download.php/856/ocamlmod-0.0.3.tar.gz
+wget http://forge.ocamlcore.org/frs/download.php/475/ocaml-expect-0.0.2.tar.gz
+wget http://forge.ocamlcore.org/frs/download.php/855/oasis-0.3.0~rc5.tar.gz
+</pre>
+
+<p> Remove GODI's type-conv: </p>
+<pre>
+godi_perform -remove godi-type_conv
+</pre>
+
+<h5>Jane-St Core</h5>
+<p>Depending if one has mercurial:</p>
+<pre>
+wget https://bitbucket.org/yminsky/ocaml-core/get/c0e9df7b574d.tar.gz
+mv c0e9df7b574d.tar.gz ocaml-core.tar.gz
+</pre>
+<p>OR</p>
+<pre>
+hg clone  https://bitbucket.org/yminsky/ocaml-core
+</pre>
+<p> <b>Two modifications</b> are needed: </p>
+<ul>
+<li> <code>base/core/top/install_printers.ml</code> → comment the
+  whole file </li>
+<li> <code>build-common.sh</code> →
+comment the “<code>if</code>” in the last function to allow the flag
+to be generated in any case
+</li>
+</ul>
+<p> Then run <code>build-and-install</code>, if does not work and
+uninstallation is needed, I found this:</p>
+<pre>
+find . -name setup.ml -exec echo cd \`dirname {}\` \&\& ocaml \`basename {}\` -uninstall  \&\& cd $PWD \; > script
+sh script
+</pre>
+
+<h5>Batteries</h5>
+
+<pre>
+git clone https://github.com/ocaml-batteries-team/batteries-included.git
+cd batteries-included
+git checkout 91a9464bf7f2d153eeaa576fe232ab2ba0eb5fc2
+./configure --prefix $OCAMLPREFIX
+make
+make install
+</pre>
+
+<h4>On Bowery</h4>
+
+<p> As of Tue, 01 May 2012 18:36:26 -0400 GODI is broken on RedHat 5
+(?). </p>
+
+<h5>OCaml</h5>
+<p>
+Get OCaml sources
+from <a href="http://caml.inria.fr">caml.inria.fr</a>, let's
+call <code>OCAMLPREFIX</code>=<code>$HOME/usr/fromscratch</code>:
+</p>
+<pre>
+./configure -prefix $OCAMLPREFIX -no-curses -no-tk 
+make world > log.world 2>&1
+make opt > log.opt 2>&1
+make opt.opt > log.optopt 2>&1
+make install
+</pre>
+
+<h5>Findlib</h5>
+
+<p> Let's make a nice findlib installation: </p>
+<pre>
+wget http://download.camlcity.org/download/findlib-1.2.8.tar.gz
+tar xvfz findlib-1.2.8.tar.gz
+cd findlib-1.2.8
+
+./configure -bindir $OCAMLPREFIX/bin/ \
+  -mandir $OCAMLPREFIX/man/ \
+  -sitelib $OCAMLPREFIX/lib/ocaml/libraries \
+  -config $OCAMLPREFIX/etc/findlib.conf
+make all opt
+make install
+</pre>
+
+<h5>Biocaml Dependencies</h5>
+
+<pre>
+wget http://hg.ocaml.info/release/ocaml-sqlite3/archive/release-1.6.1.tar.gz
+tar xvfz ocaml-sqlite3-release-1.6.1.tar.gz
+cd ocaml-sqlite3-release-1.6.1
+./configure --prefix=$OCAMLPREFIX --with-sqlite3=/share/apps/sqlite/3.7.7/intel/
+make all
+make install
+</pre>
+
+<pre>
+wget http://hg.ocaml.info/release/pcre-ocaml/archive/release-6.2.5.tar.gz
+tar xvfz pcre-ocaml-release-6.2.5.tar.gz 
+cd pcre-ocaml-release-6.2.5
+make
+make install
+</pre>
+
+<pre>
+wget http://forge.ocamlcore.org/frs/download.php/761/ocaml-getopt.tar.gz
+tar xvf ocaml-getopt.tar.gz 
+cd ocaml-getopt
+./configure --prefix $OCAMLPREFIX
+make
+make install
+</pre>
+
+<pre>
+git clone git@github.com:ocaml-batteries-team/batteries-included.git
+cd batteries-included
+git checkout 91a9464bf7f2d153eeaa576fe232ab2ba0eb5fc2
+make
+make install
+</pre>
+
+<b>You can already test Biocaml!</b>
+<pre>
+git clone git@github.com:agarwal/biocaml
+cd biocaml
+configure --prefix $OCAMLPREFIX --disable-tests
+make
+make install
+</pre>
+
+<h5>Much More With <code>odb.ml</code></h5>
+
+<p> In <code>$OCAMLPREFIX/</code>:</p>
+<pre>
+git clone git@github.com:thelema/odb.git
+</pre>
+
+<p> Create a script in <code>$OCAMLPREFIX/bin/odb</code>: </p>
+<pre>
+#!/bin/sh
+export ODB_INSTALL_DIR=$OCAMLPREFIX
+export ODB_BUILD_DIR=$OCAMLPREFIX/odb_build
+export ODB_LIB_DIR=$OCAMLPREFIX/lib/ocaml/libraries/
+ocaml $OCAMLPREFIX/odb/odb.ml $*
+</pre>
+
+<p> Going to get <i>even Oasis 0.3rc3</i>! </p>
+<pre>
+odb --unstable fileutils
+odb --unstable oasis
+odb --unstable csv
+odb --unstable calendar
+odb --unstable res
+</pre>
+
+<h5>The PGOCaml Mess</h5>
+
+<p> It starts standardly … </p>
+<pre>
+wget http://forge.ocamlcore.org/frs/download.php/850/pgocaml-1.5.tgz
+tar xvfz pgocaml-1.5.tgz
+cd pgocaml-1.5
+</pre>
+
+<p>
+One needs to edit <code>Makefile.config</code> and
+set <code>USE_BATTERIES</code> to <b>yes</b>.
+</p>
+
+<p>
+Also edit  <code>pa_pgsql.ml4</code>
+to replace <code>Batteries_uni</code> with <code>Batteries</code>
+</p>
+
+<p>
+Moreover to make it compile one needs to compile a (bunch of) mli(s)
+</p>
+<pre>
+ocamlfind ocamlc -g -syntax camlp4o -package camlp4.macro -ppopt -DUSE_BATTERIES  -package unix,batteries,pcre,calendar,csv -c *.mli
+</pre>
+<p> and try <code>make</code> once in a while.</p>
+
+<p> Install it manually: </p>
+<pre>
+ocamlfind install pgocaml META *.cmo *.cmi *.cma *.cmxa  *.cmx *.a
+</pre>
+
+<p> And <b>test</b> with: </p>
+<pre>
+hitscore dev wenv 'ocamlfind ocamlc -syntax camlp4o -package pgocaml.syntax,pgocaml test_pgocaml.ml'
+</pre>
+
+<h5>Jane-St Core</h5>
+
+
+<pre>
+hg clone https://bitbucket.org/yminsky/ocaml-core
+</pre>
+<p>
+Edit <code>base/core/top/install_printers.ml</code> and
+comment out the whole file.
+</p>
+<pre>
+./build-and-install
+</pre>
+
+<h3>For Hitscoreweb</h3>
+
+<h4>On Ubuntu/Centos 6</h4>
+
+<p>
+  Get more GODI stuff:
+</p>
+<pre>
+godi_perform -build godi-cryptokit \
+  -build godi-ocaml-ssl \
+  -build godi-react \
+  -build godi-ocaml-text
+</pre>
+
+<p>
+Go to get the
+<a href="http://ocsigen.org/bundle">Ocsigen Bundle</a>
+(version <code>2.0.2c</code>).
+</p>
+<pre>
+./configure --prefix $OCAMLPREFIX \
+    OCSIGEN_USER=${USER} OCSIGEN_GROUP=${USER}  \
+    --enable-oclosure --with-ocamldsort
+</pre>
+<p>
+and before building, force the installation to go to
+GODI's <code>site-lib</code> by creating a file
+<b><code>Makefile.local</code></b>:
+</p>
+<pre>
+SITELIB := ${exec_prefix}/lib/ocaml/site-lib
+LDCONF  := ${exec_prefix}/etc/ld.conf
+STUBDIR := ${SITELIB}/stublibs
+</pre>
+
+<p>
+Then, <i>only on Centos 6</i>:
+(where <code>libev</code> not installed in a <i>debian-like</i> directory):
+</p>
+<pre>
+export C_INCLUDE_PATH=/usr/include/libev
+export LIBRARY_PATH=/usr/lib 
+</pre>
+
+<p>Finally, one can: </p>
+<pre>
+make
+make install
+</pre>
+

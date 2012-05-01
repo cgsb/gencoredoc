@@ -4,27 +4,10 @@
 
 {3 External Dependencies}
 
-{4 For Biocaml/Sequme/Hitscore}
+{4 For Biocaml/Sequme/Hitscore/Hitscoreweb}
 
-Get libs:
-{v
-godi_perform \
-  -build godi-janestreet-core-extended \
-  -build godi-ocaml-csv \
-  -build godi-getopt \
-  -build godi-sqlite3 \
-  -build godi-pgocaml
-v}
-
-Get batteries from
-{{:https://github.com/ocaml-batteries-team/batteries-included}github}.
-
-{4 For Hiscoreweb}
-
-You need {e darcs} in the {e $PATH}.
-
-Go to {{:http://ocsigen.org/bundle}ocsigen.org/bundle}, follow the
-instructions (don't forget O'Closure).
+See the now separated
+{{:./install_dependencies.html}install dependencies document}.
 
 {4 For Gencoredoc}
 
