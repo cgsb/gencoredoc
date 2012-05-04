@@ -83,6 +83,7 @@ Projects: {ul
 General documentations: {ul
   {li {{:ocaml_links.html}OCaml links}}
   {li {{:ssl.html}SSL Specific Notes}}
+  {li {{:ocaml_db.html}About Databases With OCaml}}
 }
 
 Presentations: {ul

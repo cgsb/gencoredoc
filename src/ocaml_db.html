@@ -1,0 +1,112 @@
+
+<h2>OCaml And Databases</h2>
+
+<h3>PG'OCaml</h3>
+<p> 
+<a href="http://pgocaml.forge.ocamlcore.org/">PG'OCaml's website</a>:</p>
+<ul>
+  <li> <a href="http://unnali.com/2011/01/postgresql-and-pgocaml/">introductory
+  blog post</a></li>
+  <li>Dario Teixeira's
+    <a href="http://www.dse.nl/~dario/projects/pgoctut/">tutorial</a></li>
+  <li>Things like <em>LEFT OUTER JOIN</em> with <em>"nullable-results"</em> are in
+    <a href="https://github.com/angavrilov/pgocaml/blob/master-classic/BUGS.txt">BUGS.txt</a></li>
+  <li>Postgres 9.1
+    <a href="http://www.postgresql.org/docs/9.1/interactive/index.html">manual</a></li>
+</ul>
+
+<p> Getting Postgres on a Debian-like system:</p>
+<pre>
+apt-get install postgresql postgresql-client
+sudo su postgres
+createuser -s &lt;username&gt;</pre>
+
+<p> On CentOS it is more low-level (c.f. a few docs:
+<a href="http://www.cyberciti.biz/faq/howto-fedora-linux-install-postgresql-server/">1</a>,
+<a href="http://www.cyberciti.biz/faq/howto-add-postgresql-user-account/">2</a>):</p>
+<pre>yum install postgresql postgresql-server
+service postgresql initdb
+/etc/init.d/postgresql restart
+su - postgres
+psql template1</pre>
+<p>In <em>psql</em>:</p>
+<pre>create user smondet;
+create database smondet;
+grant all privileges on database smondet to smondet;</pre>
+
+<h3>postgresql-ocaml</h3>
+
+<p>
+  <a href="http://www.ocaml.info/home/ocaml_sources.html#toc11">On
+Markus Mottl's website</a>; see also 
+<a href="http://hg.ocaml.info/release/postgresql-ocaml/file/d90cc995646d/lib/postgresql.mli">postgresql.mli</a>
+</p>
+<ul>
+  <li>There are asynchronous functions but not at the Lwt level</li>
+  <li>Wrapper around the C libpq library</li>
+  <li>Used at Jane St (?)</li>
+</ul>
+
+
+<h3>OCamlODBC</h3>
+
+<p>
+  <a href="http://ocamlodbc.forge.ocamlcore.org/">Website</a>,
+  <a href="http://ocamlodbc.forge.ocamlcore.org/doc/Ocamlodbc.html">ocamldoc</a>,
+</p>
+<ul>
+  <li>Works with MySQL, PostgreSQL, UnixODBC, MS-Access</li>
+  <li>No asynchronous mode</li>
+</ul>
+
+<h3>Ocsipersist</h3>
+
+<p>
+  <a href="http://ocsigen.org/ocsigenserver/api/Ocsipersist"> Part of the ocsigenserver</a>, it <i>lwt-ifies</i> 
+  <a href="http://caml.inria.fr/pub/docs/manual-ocaml/libref/Dbm.html">OCaml's <code>dbm</code>
+    library</a>
+  (<a href="http://ocsigen.org/darcsweb/?r=ocsigenserver.dev;a=tree;f=/src/extensions/ocsipersist-dbm">darcs:src/extensions/ocsipersist-dbm</a>)
+  or
+  <a href="http://www.ocaml.info/home/ocaml_sources.html">ocaml-sqlite3</a>
+  (<a href="http://ocsigen.org/darcsweb/?r=ocsigenserver.dev;a=tree;f=/src/extensions/ocsipersist-sqlite">darcs:src/extensions/ocsipersist-sqlite</a>).
+</p>
+
+<h3>ocaml-mysql</h3>
+
+<p>
+  <a href="http://ocaml-mysql.forge.ocamlcore.org/">ocaml-mysql.forge.ocamlcore.org</a>
+</p>
+
+<h3>To Explore</h3>
+
+<ul>
+  <li>
+    <a href="https://github.com/mfp/ocaml-leveldb">ocaml-leveldb</a>:
+    OCaml bindings for Google's LevelDB
+  </li>
+  <li>
+    <a href="https://github.com/mfp/ocaml-cassandra">ocaml-cassandra</a>:
+    OCaml client library for the Apache Cassandra highly scalable
+    distributed database
+  </li>
+  <li>
+    <a href="http://arakoon.org/">Arakoon</a>:
+    distributed key-value store in OCaml.
+    (<a href="https://github.com/Incubaid/arakoon">github</a> and
+    <a href="https://bitbucket.org/despiegk/arakoon">bitbucket</a>)
+  </li>
+  <li>
+    <a href="https://forge.ocamlcore.org/projects/hypertable/">hypertable
+      bindings</a>
+    (c.f. <a href="http://en.wikipedia.org/wiki/Hypertable">wikipedia</a>)
+  </li>
+  <li>
+    <a href="https://github.com/kiyoto/caml_mongo">caml_mongo</a>
+  </li>
+  <li>
+    <a href="http://plasma.camlcity.org/plasma/index.html">Plasma *</a>
+  </li>
+  
+</ul>
+
+

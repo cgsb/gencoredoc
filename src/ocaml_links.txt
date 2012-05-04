@@ -31,42 +31,6 @@ Biocaml and Sequme use {{:http://batteries.forge.ocamlcore.org/}Batteries}: {ul
   {li {{:https://github.com/ocaml-batteries-team/batteries-included/wiki/}wiki}}
 }
 
-{3 PG'OCaml}
-
-{{:http://pgocaml.forge.ocamlcore.org/}PG'OCaml}: {ul
-  {li
-    {{:http://unnali.com/2011/01/postgresql-and-pgocaml/}introductory blog post}}
-  {li Dario Teixeira's
-    {{:http://www.dse.nl/~dario/projects/pgoctut/}tutorial}}
-  {li Things like {e LEFT OUTER JOIN} with {e "nullable-results"} are in
-    {{:https://github.com/angavrilov/pgocaml/blob/master-classic/BUGS.txt}BUGS.txt}}
-  {li Postgres 9.1
-    {{:http://www.postgresql.org/docs/9.1/interactive/index.html}manual}}
-}
-
-Getting Postgres on a Debian-like system: {v
-apt-get install postgresql postgresql-client
-sudo su postgres
-createuser -s <username>
-v}
-
-On CentOS it is more low-level (c.f. a few docs:
-{{:http://www.cyberciti.biz/faq/howto-fedora-linux-install-postgresql-server/}1},
-{{:http://www.cyberciti.biz/faq/howto-add-postgresql-user-account/}2}):
-{v
-yum install postgresql postgresql-server
-service postgresql initdb
-/etc/init.d/postgresql restart
-su - postgres
-psql template1
-v}
-In {e psql}:
-{v
-create user smondet;
-create database smondet;
-grant all privileges on database smondet to smondet;
-v}
-
 
 {3 Ocsigen}
 
