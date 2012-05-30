@@ -270,6 +270,85 @@ comment out the whole file.
 ./build-and-install
 </pre>
 
+
+<h4>On Bowery (Again)</h4>
+
+<p>
+  There follows a complete successful build of the dependencies on
+  bowery on Wed, 30 May 2012.
+</p>
+<pre>
+unset ARCHIVE
+./bootstrap --prefix  $HOME/usr/godi_20120530 
+
+vim  $HOME/usr/godi_20120530/etc/godi.conf
+    GODI_SQLITE3_PREFIX=/share/apps/sqlite/3.7.7/intel/
+
+godi_perform -build godi-sqlite3 \
+             -build godi-pgocaml \
+             -build godi-getopt \
+             -build apps-ocamlify \
+             -build apps-oasis \
+             -build godi-res \
+             -build godi-ounit \
+             -build apps-ledit
+godi_perform -remove godi-type_conv
+
+wget https://bitbucket.org/yminsky/ocaml-core/downloads/core-suite-108.00.01.tar.gz
+tar xvfz core-suite-108.00.01.tar.gz
+cd core-suite-108.00.01
+./build-and-install 
+
+git clone git@github.com:ocaml-batteries-team/batteries-included.git
+cd batteries-included
+git checkout 91a9464bf7f2d153eeaa576fe232ab2ba0eb5fc2
+make
+make install
+
+wget http://dist.schmorp.de/libev/libev-4.11.tar.gz
+tar xvfz libev-4.11.tar.gz 
+cd libev-4.11
+./configure --prefix=$OCAMLPREFIX
+make
+make install
+
+#Get ocaml-ssl from sourceforge (no download link?)
+wget http://sourceforge.net/projects/savonet/files/ocaml-ssl/0.4.6/ocaml-ssl-0.4.6.tar.gz/download
+tar xvfz ocaml-ssl-0.4.6.tar.gz
+cd ocaml-ssl-0.4.6
+./configure --prefix $OCAMLPREFIX LDFLAGS=-L/share/apps/openssl/1.0.0d/gnu/lib CFLAGS=-I/share/apps/openssl/1.0.0d/gnu/include
+make
+make install
+
+export C_INCLUDE_PATH=/home/sm4431/usr/godi000/include/
+export LIBRARY_PATH=/home/sm4431/usr/godi000/lib/
+wget http://ocsigen.org/download/lwt-2.3.2.tar.gz
+tar xvfz lwt-2.3.2.tar.gz
+cd lwt-2.3.2
+./configure --prefix $OCAMLPREFIX --enable-ssl
+make 
+make install
+
+# Add the linkopts:
+vim ~/usr/godi000/lib/ocaml/site-lib/lwt/META
+    package "ssl" (
+     version = "2.3.2"
+     description = "SSL support for Lwt"
+     requires = "ssl lwt.unix"
+     archive(byte) = "lwt-ssl.cma"
+     archive(native) = "lwt-ssl.cmxa"
+     exists_if = "lwt-ssl.cma"
+     linkopts = "-cclib -L/share/apps/openssl/1.0.0d/gnu/lib"
+    )
+
+# not using branch "hack_server", this may be enough:
+godi_perform -option godi-lwt:GODI_LWT_SSL=no \
+             -option godi-lwt:GODI_LWT_GLIB=no \
+             -option godi-lwt:GODI_LWT_OCAMLTEXT=no \
+             -build godi-lwt
+
+</pre>
+
 <h3>For Hitscoreweb</h3>
 
 <h4>On Ubuntu/Centos 6</h4>
