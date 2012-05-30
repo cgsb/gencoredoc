@@ -1,0 +1,49 @@
+
+<h2>Instructions For Building and Installing</h2>
+
+<h3>External Dependencies</h3>
+
+<h4>For Biocaml/Sequme/Hitscore/Hitscoreweb</h4>
+
+<p>See the now separated
+  <a href="./install_dependencies.html">install dependencies document</a>.
+</p>
+
+<h4>For Gencoredoc</h4>
+
+<p>Gencoredoc wants <code>ocamldoc</code>, <code>m4</code>,
+  and <code>inkscape</code> in the <code>$PATH</code>. </p>
+
+<h3>Biocaml/Sequme/Hitscore/Hitscoreweb</h3>
+
+<p>All these projects now should get compiled easily with:</p>
+<pre>
+ocaml setup.ml -configure --prefix $OCAMLPREFIX
+make
+make install
+</pre>
+
+<p>
+  <i>Hitscore</i> has a “<code>make install-version</code>” target to
+install an executable named with the version number:
+<code>hitscore-x.y</code>
+</p>
+
+<p>
+  <i>Hitscoreweb</i> has a “<code>make static</code>” target to build the
+native version of the website and statically link it with
+ocsigenserver and all the dependencies.
+</p>
+
+<h3>Gencoredoc</h3>
+
+<p>Call <code>make doc</code>
+in <code>biocaml/</code>, <code>sequme/</code>,
+and <code>hitscore/</code> and then type <code>make</code>.</p>
+
+<p>
+  If the directory structure is not the same, set the
+variables <code>HITSCORE_DOC</code>, <code>SEQUME_DOC</code>,
+and/or <code>BIOCAML_DOC</code> in a file <code>setup.data</code>, e.g.:
+<pre>echo 'HITSCORE_DOC = ../../some/special/path/to_hiscore' &gt; setup.data</pre><br>
+</p>
