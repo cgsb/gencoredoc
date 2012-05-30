@@ -32,7 +32,6 @@ Projects: {ul
       {li {{:__hitscore_doc_path/hitscore_layout_digraph.jpg}The Layout}
           ({{:__hitscore_doc_path/hitscore_layout_digraph.pdf}pdf}).
       }
-      {li {{:hitscore_migration.html}Notes on {b migrations}.}}
       {li {{:hitscore_config_file.html}Notes on the {b configuration file}.}}
       {li {{:hitscore_dev_notes.html}{b Development} notes.}}
      }}

@@ -135,3 +135,32 @@ hitscoreweb production rpm -rpm-release 8 \
 <p> One may use something like this after stopping the service: </p>
 
 <pre> # while true; do echo "Gencore stopped for Maintenance, come back in a few minutes" | nc -l 80 ; done</pre><br>
+
+<h3>Migration Between Versions</h3>
+
+<p> Follow the following steps to do in order to switch to a new version <code>V.W</code>:</p>
+<ul>
+  <li> (if not already done) switch the version to <code>V.W</code> <ul>
+      <li>In the <code>_oasis</code> file (requires an <code>ocaml setup.ml -distclean</code>,
+        and an <b><code>oasis setup</code></b>)</li>
+      <li>in the migrator: <code>mk</code> script (with the <i>future</i> <code>vV.W</code> git
+        tag)</li>
+    </ul>
+  </li>
+  <li>merge to <code>master</code></li>
+  <li><code>git tag -a vV.W -m '...'</code></li>
+  <li>With the previous version of <code>hitscore</code>: <ul>
+      <li><code>hitscore production dump-to-file hitscore_dump.sexp</code></li>
+    </ul>
+  </li>
+  <li>Compile <code>hitscore</code> and the migrator with v. <code>V.W</code>, and: <ul>
+      <li><code>_migrator/migrator vPrev-vV.W hitscore_dump.sexp hitscore_to_load.sexp</code></li>
+      <li><code>hitscore production wipe-out-database I am sure</code> <i>(or re-init
+          the DB in some other way)</i></li>
+      <li><code>hitscore production check-db</code></li>
+      <li><code>hitscore production load-file hitscore_to_load.sexp</code></li>
+    </ul>
+  </li>
+</ul>
+
+
