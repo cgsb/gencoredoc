@@ -32,17 +32,22 @@ _build/%.pp: src/%.txt $(COMMON_DEPS)
 _build/%.ppml: src/%.html $(COMMON_DEPS)
 	$(M4_HTML) $< > $@
 
+_build/%.sdxpp: src/%.sdx $(COMMON_DEPS)
+	$(M4_HTML) $< > $@
+
 SVG_SOURCES = $(basename $(shell find src/img/ -name "*.svg" -exec basename {} \;))
 PNG_SOURCES = $(basename $(shell find src/img/ -name "*.png" -exec basename {} \;))
 TXT_SOURCES = $(basename $(shell find src/ -name "*.txt" -exec basename {} \;))
 HTM_SOURCES = $(basename $(shell find src/ -name "*.html" -exec basename {} \;))
+SDX_SOURCES = $(basename $(shell find src/ -name "*.sdx" -exec basename {} \;))
 SOURCES= $(TXT_SOURCES) $(HTM_SOURCES)
 
 PNG_FILES= $(addprefix _build/doc/img/, $(addsuffix .png, $(SVG_SOURCES))) \
 	   $(addprefix _build/doc/img/, $(addsuffix .png, $(PNG_SOURCES)))
 HTML_OF_HTM_FILES= $(addprefix _build/doc/, $(addsuffix .html, $(HTM_SOURCES)))
 HTML_OF_TXT_FILES= $(addprefix _build/doc/, $(addsuffix .html, $(TXT_SOURCES)))
-HTML_FILES = $(HTML_OF_TXT_FILES) $(HTML_OF_HTM_FILES)
+HTML_OF_SDX_FILES= $(addprefix _build/doc/, $(addsuffix .html, $(SDX_SOURCES)))
+HTML_FILES = $(HTML_OF_TXT_FILES) $(HTML_OF_HTM_FILES) $(HTML_OF_SDX_FILES)
 
 _build/doc/gdcstyle.css: src/style.css
 	$(M4_HTML) $< > $@
@@ -68,6 +73,9 @@ $(HTML_OF_TXT_FILES):_build/doc/%.html: _build/%.pp $(COMMON_DEPS)
 $(HTML_OF_HTM_FILES):_build/doc/%.html: src/%.html templates/page_template.tmpl
 	awk -vf2="$$(cat $<)" '/GCD_HTML_TEMPLATE_BODY/{print f2;print;next}1' \
 		templates/page_template.tmpl > $@
+
+$(HTML_OF_SDX_FILES):_build/doc/%.html: _build/%.sdxpp templates/page_template.tmpl
+	ocaml bin/sdx_to_html.ml $< $@
 
 _build/doc/img/%.png: src/img/%.svg
 	inkscape -z -e $@ $<
