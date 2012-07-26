@@ -1,0 +1,21 @@
+
+<h1>The Sequme Format For Documentation</h1>
+
+<h2 id="syntax">Syntax</h2>
+
+We use a simple XML format:
+<list>
+  <item>Inline content:
+    <b>&lt;b&gt; for bold</b>,
+    <i>&lt;i&gt; for italic</i>,
+    <t>&lt;t&gt; for typewriter</t>
+  </item>
+  <item>Sections: <t>h1</t>, <t>h2</t>, <t>h3</t>, <t>h4</t>.</item>
+  <item>Links:
+  <t>&lt;link url="http://gencore.bio.nyu.edu"&gt;Gencore&lt;link&gt;</t>
+  gives: <link url="http://gencore.bio.nyu.edu">Gencore</link>, <br/>
+  <t>&lt;link local="syntax"&gt;syntax section&lt;link&gt;</t>
+  gives: <link local="syntax">syntax section</link></item>
+</list>
+<p/>
+
