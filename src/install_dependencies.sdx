@@ -1,0 +1,41 @@
+
+<h1>Install OCaml software and Libraries</h1>
+
+<h2>Foreword</h2>
+
+Recommended overall setup:
+<p/>
+<list>
+  <item>
+    Everything should go to a directory like <t>~/usr/godi312</t>
+  </item>
+  <item>
+    A symbolic link is then created in <t>~/usr</t>:
+    <code>
+ln -s godi312 0Caml
+    </code>
+    this symbolic link can then be changed to have more than one OCaml
+    dependency tree.
+  </item>
+  <item>Paths are set up with <t>0Caml</t>
+  <code>
+export OCAMLPREFIX=$HOME/usr/0Caml 
+export PATH=$PATH:$OCAMLPREFIX/bin/:$OCAMLPREFIX/sbin/
+export MANPATH=$MANPATH:$OCAMLPREFIX/man/
+  </code>
+  </item>
+  <item>And every program or library which depends on that version of the
+OCaml installation should go there. E.g.:
+  <code>
+ocaml setup.ml -configure --prefix $OCAMLPREFIX
+  </code>
+  </item>
+</list>
+
+<h2>Install OCaml And All Dependencies</h2>
+
+Simply check-out
+<link url="https://github.com/agarwal/sequme">Sequme</link>, and run:
+<code>
+bash src/scripts/install-ocaml.sh &lt;computer&gt; &lt;/installation/path&gt;
+</code>
