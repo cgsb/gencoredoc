@@ -8,7 +8,7 @@
 <pre> $ hitscore &lt;profile&gt; pss &lt;phix_spec&gt; &lt;file_csv&gt;</pre>
 
 <p>Do the real one (check the run-plan for PhiX spike-in):</p>
-<pre> $ hitscore production -wet-run A:1,B:2 pss.csv</pre>
+<pre> $ hitscore production pss -wet-run A:1,B:2 pss.csv</pre>
 <p><code>A:1,B:2</code> means that the pool A has 1% PhiX and the pool B 2%.
 If no pool has PhiX, the user has to specify 'No_PhiX' (case
 insensitive).</p>
@@ -78,7 +78,7 @@ Where the commands are:
 <p> Right now, its input is the ID of a given <i>bcl-to-fastq</i> run
 For example, after the <i>bcl-to-fastq</i> 42 has finished successfully: </p>
 <pre>
-hitscore production fxqs -from-b2f 42
+hitscore production fxqs start -from-b2f 42
 </pre>
 
 <span id="3_Delivery"><h3>Delivery</h3></span>
