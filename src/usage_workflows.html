@@ -163,4 +163,10 @@ hitscoreweb production rpm -rpm-release 8 \
   </li>
 </ul>
 
+<h3>Setting a Password For a User</h3>
 
+The <code>password_hash</code> field has to be set in the database
+record of the person. It is computed this way:
+<pre>
+  echo -n "gencore:<b>&lt;id&gt;</b>:<b>&lt;password&gt;</b>" | sha256sum
+</pre>
